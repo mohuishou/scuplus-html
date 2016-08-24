@@ -1,16 +1,12 @@
 <template>
   <div id="login">
-    <group>
+    <group class="login-input">
       <x-input title="手机号" :max="11" :min="11" is-type="china-mobile" :show-clear=true
       v-ref:phone placeholder="请输入手机号"></x-input>
-      <x-input 
-      title="密　码"
-      type="password" 
-      :show-clear=true 
-      placeholder="请输入密码"></x-input>
+      <x-input title="密　码" type="password"  :show-clear=true placeholder="请输入密码"></x-input>
     </group>
-    <a class="forgot">忘记密码？</a>
     <x-button :text="btnText" :disabled="isDisabled" @click="login" plain></x-button>
+    <a class="forgot">忘记密码？</a>
   </div>
 
 </template>
@@ -44,6 +40,9 @@ export default {
 <style>
   #login{
     margin-top:30px;
+  }
+  .login-input{
+    margin-bottom: 10px;
   }
   .forgot{
     display:block;
