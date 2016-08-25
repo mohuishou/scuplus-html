@@ -168,24 +168,20 @@
 </template>
 
 <script>
-import {Timeline,TimelineItem }from 'vux/src/components/timeline'
 
 
 export default {
-  components: {
-    Timeline,TimelineItem
-  },
-  
   
 }
 </script>
-<style>
+<style lang="less">
   
   #grade{
     background: #fff;
     padding: 10px;
   }
-  table {
+  #grade{
+      table {
     border: 1px solid #ccc;
     width:95%;
     margin:0;
@@ -227,6 +223,8 @@ export default {
 
   table thead tr,table thead th{
     border:none;
+  }
+
   }
 
   

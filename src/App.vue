@@ -45,11 +45,16 @@ import XHeader from  'vux/src/components/x-header'
 import ViewBox from 'vux/src/components/view-box'
 import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
 
+/**
+ * 标题
+ * @type {Object}
+ */
 const titles={
   default:'scuplus',
   exam:'考表',
   search:'搜索',
-  login:'登录'
+  login:'登录',
+  grade:"成绩"
 };
 
 export default {

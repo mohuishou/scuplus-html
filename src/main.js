@@ -7,6 +7,7 @@ import Assistant from './Assistant'
 import Search from './Search'
 import Exam from './Exam'
 import Grade from './Grade'
+import Schedule from './Schedule'
 
 Vue.use(Router);
 
@@ -30,6 +31,9 @@ router.map({
 	},
 	'/grade':{
 		component: Grade
+	},
+	'/schedule':{
+		component: Schedule
 	}
 });
 
