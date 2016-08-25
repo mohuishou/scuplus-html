@@ -1,10 +1,17 @@
 <template>
   <div style="height: 100%;">
   <view-box v-ref:view-box>
+
+    <!-- header -->
     <div class="header" slot="header">
-        <x-header :left-options="test"  :title="title"></x-header>
-      </div>
-       <router-view :transition="vux-pop-in"></router-view>
+      <x-header :left-options="test"  :title="title"></x-header>
+    </div>
+
+
+    <!-- router -->
+    <router-view :transition="vux-pop-in"></router-view>
+
+    <!-- 底部 -->
       <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
       <!--use v-link-->
       <tabbar-item selected link="/">
@@ -37,6 +44,14 @@ import Cell from 'vux/src/components/cell'
 import XHeader from  'vux/src/components/x-header'
 import ViewBox from 'vux/src/components/view-box'
 import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
+
+const titles={
+  default:'scuplus',
+  exam:'考表',
+  search:'搜索',
+  login:'登录'
+};
+
 export default {
   components: {
     Group,
@@ -47,12 +62,20 @@ export default {
     ViewBox
   },
   data (){
-    return{
+    return {
       test:{
         showBack:false
       },
       title:'scuplus'
-
+    }
+  },
+  computed: {
+    title () {
+        let path=(this.$route.path.split("/"))[1];
+        if(path in titles){
+          return titles[path];
+        }
+        return titles.default;
     }
   }
 }

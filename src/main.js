@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import Login from './Login'
 import Assistant from './Assistant'
 import Search from './Search'
+import Exam from './Exam'
 
 Vue.use(Router);
 
@@ -22,6 +23,9 @@ router.map({
 	},
 	'/search':{
 		component: Search
+	},
+	'/exam':{
+		component: Exam
 	}
 });
 
