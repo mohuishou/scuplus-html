@@ -6,6 +6,7 @@ import Login from './Login'
 import Assistant from './Assistant'
 import Search from './Search'
 import Exam from './Exam'
+import Grade from './Grade'
 
 Vue.use(Router);
 
@@ -26,6 +27,9 @@ router.map({
 	},
 	'/exam':{
 		component: Exam
+	},
+	'/grade':{
+		component: Grade
 	}
 });
 
