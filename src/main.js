@@ -9,6 +9,7 @@ import Exam from './Exam'
 import Grade from './Grade'
 import Schedule from './Schedule'
 import Register from './Register'
+import BindJwc from './BindJwc'
 
 Vue.use(Router);
 
@@ -38,6 +39,9 @@ router.map({
 	},
 	'/register':{
 		component:Register
+	},
+	'/bind-jwc':{
+		component:BindJwc
 	}
 });
 

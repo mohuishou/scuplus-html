@@ -12,10 +12,11 @@
       <x-input title="手机号" v-show="registerType==2" :max="11" :min="11" is-type="china-mobile" :show-clear=true
       v-ref:phone placeholder="请输入手机号"></x-input>
       <x-input title="邮　箱" v-show="registerType==1"  is-type="email" :show-clear=true v-ref:phone placeholder="请输入邮箱"></x-input>
-      <x-input title="验证码" type="password"  :show-clear=true placeholder="请输入密码"></x-input>
+      <x-input title="验证码" type="password"  :show-clear=true placeholder="请输入密码">
+        <x-button slot="right" type="primary">发送验证码</x-button>
+      </x-input>
     </group>
     <x-button :text="btnText" :disabled="isDisabled" @click="login" plain></x-button>
-    <a class="forgot">忘记密码？</a>
   </div>
 
 </template>
