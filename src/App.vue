@@ -54,7 +54,8 @@ const titles={
   exam:'考表',
   search:'搜索',
   login:'登录',
-  grade:"成绩"
+  grade:"成绩",
+  schedule:"课程表"
 };
 
 export default {
