@@ -10,6 +10,7 @@ import Grade from './Grade'
 import Schedule from './Schedule'
 import Register from './Register'
 import BindJwc from './BindJwc'
+import User from './User'
 
 Vue.use(Router);
 
@@ -42,6 +43,9 @@ router.map({
 	},
 	'/bind-jwc':{
 		component:BindJwc
+	},
+	'/user':{
+		component:User
 	}
 });
 

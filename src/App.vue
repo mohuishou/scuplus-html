@@ -9,7 +9,7 @@
 
 
     <!-- router -->
-    <router-view :transition="vux-pop-in"></router-view>
+    <router-view ></router-view>
 
     <!-- 底部 -->
       <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
