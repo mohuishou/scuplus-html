@@ -13,7 +13,6 @@ import BindJwc from './BindJwc'
 import User from './User'
 
 Vue.use(Router);
-
 const router = new Router({
 	transitionOnLoad: false,
 	suppressTransitionError: true
