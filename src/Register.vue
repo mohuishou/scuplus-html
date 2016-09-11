@@ -17,7 +17,7 @@
       <x-input title="验证码" :value.sync="verifyCode" :show-clear=false type="number" placeholder="请输入验证码">
         <x-button slot="right"  v-show="countShow"  type="disabled">
           发送中
-          <countdown :time="120" @on-finish="countShow = !countShow;start=false;" v-show="countShow"></countdown>
+          <countdown :time="120" @on-finish="verifyFinish"></countdown>
         </x-button>
         <x-button  @click="sendVerify" slot="right" v-show="!countShow" type="primary">发送验证码</x-button>
       </x-input>
@@ -56,23 +56,47 @@ export default {
       toastShow:false,
       countShow:false,
       password:'',
-      verifyCode:0
+      verifyCode:''
     }
   },
   methods :{
     //注册
     register:function(){
+      let _this=this;
+
       param.verifyCode=this.verifyCode;
       param.password=this.password;
-      let url="http://api.scuplus.cn/register/1";
+      let a=["username","password","verifyCode"];
+
+      for(let i =0;i<a.length;i++){
+        if(!(a[i] in param)){
+          _this.toast="参数错误！";
+          _this.toastShow=true;
+          return;
+        }
+      }
+
+      let url="http://api.scuplus.cn/register/"+this.registerType;
+
       $.post(url,param,function(r,e){
+
+        if(e){
+          _this.toast="注册失败";
+          _this.toastShow=true;
+          return;
+        }
+
         if(r.status==1){
           _this.toast="注册成功";
           _this.toastShow=true;
-
-          //todo:跳转到教务处绑定页面
+          _this.$route.go("/binf-jwc");
         }
+
       });
+    },
+    //验证码发送倒计时
+    verifyFinish:function(){
+      this.countShow=false;
     },
     //发送验证码
     sendVerify:function(){
@@ -95,6 +119,7 @@ export default {
       //开启倒计时
       this.countShow=!this.countShow;
     },
+
     //检测用户名
     changeUsername : function (v) {
         let _this=this;
@@ -113,6 +138,8 @@ export default {
           }
         });
     },
+
+    //检测手机号
     changePhone:function (v){
         if(!this.$refs.phone.valid){
             this.toast="请输入正确的手机号"
@@ -136,6 +163,8 @@ export default {
           }
         });
     },
+
+    //检测邮箱地址是否符合
     changeEmail:function (v){
         if(!this.$refs.email.valid){
             this.toast="请输入正确的邮箱"

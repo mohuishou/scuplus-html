@@ -55,7 +55,8 @@ const titles={
   search:'搜索',
   login:'登录',
   grade:"成绩",
-  schedule:"课程表"
+  schedule:"课程表",
+  "bind-jwc":"绑定教务处"
 };
 
 export default {
