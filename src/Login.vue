@@ -20,6 +20,35 @@
     import md5 from "md5"
     let param={};
 
+    /**
+     * 刷新token
+     * @return {[type]} [description]
+     */
+    function refreshToken(){
+      let token=$.fn.cookie("token");
+      if(!token){
+        console.warn("没有获取到token，请重新登录！");
+        return false;
+      }
+      let url="http://api.scuplus.cn/token/refresh";
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data: {token:token},
+        success:function(r){
+          console.log(r);
+          if(r.status==1){
+              _this.toastType="success";
+              $.fn.cookie('tooken',r.data.token);
+          }
+        },
+        error:function(x,t,e) {
+          console.warn(x);
+        }
+      });
+
+    }
+
 
     export default {
         components: {
@@ -84,7 +113,8 @@
                     console.log(r);
                     if(r.status==1){
                         _this.toastType="success";
-                        //todo:保存token
+                        $.fn.cookie('tooken',r.data.token);
+                        setInterval(refreshToken,65*1000*60*2);//不到两小时刷新一次
                     }
                     _this.toast=r.msg;
                     _this.toastShow=true;
@@ -95,8 +125,6 @@
                       _this.toast="参数错误！";
                     }
                     _this.toastShow=true;
-
-                    
                   },
                   complete:function(){
                     _this.isDisabled=false;
