@@ -39,7 +39,7 @@
           console.log(r);
           if(r.status==1){
               _this.toastType="success";
-              $.fn.cookie('tooken',r.data.token);
+              $.fn.cookie('token',r.data.token);
           }
         },
         error:function(x,t,e) {
@@ -70,11 +70,13 @@
         },
         methods: {
             userCheck: function() {
+              //清空
+              param.email="";
+              param.phone="";
               const reg_email=/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/;
               const reg_phone=/0?(13|14|15|17|18)[0-9]{9}/;
               let user = this.user;
               let is_email=reg_email.test(user);
-
               if(is_email){
                 param.email=user;
               }else{
@@ -113,8 +115,8 @@
                     console.log(r);
                     if(r.status==1){
                         _this.toastType="success";
-                        $.fn.cookie('tooken',r.data.token);
-                        setInterval(refreshToken,65*1000*60*2);//不到两小时刷新一次
+                        $.fn.cookie('token',r.data.token);
+                        setInterval(refreshToken,59*1000*60*2);//不到两小时刷新一次
                     }
                     _this.toast=r.msg;
                     _this.toastShow=true;

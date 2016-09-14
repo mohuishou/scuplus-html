@@ -1,5 +1,6 @@
 <template>
   <div id="grade">
+
     <table class="table table-resposive table-bordered">
 
     <caption>
@@ -168,10 +169,34 @@
 </template>
 
 <script>
-
-
+function getGrade(){
+  let url="http://api.scuplus.cn/jwc/grade";
+  $.ajax({
+    url: url,
+    data:{token:$.fn.cookie("token")},
+    type: 'get',
+    success:function(r){
+      console.log(r);
+      if(r.status==1){
+          
+      }
+      
+    },
+    error:function(x,t,e) {
+     
+    },
+    complete:function(){
+      
+    }
+  });
+}
 export default {
-  
+  data (){
+    getGrade();
+    return {
+
+    }
+  }
 }
 </script>
 <style lang="less">
