@@ -18,34 +18,36 @@
     import XButton from 'vux/src/components/x-button'
     import Toast from 'vux/src/components/toast'
     import md5 from "md5"
-    let param={};
+    let param = {};
 
     /**
      * 刷新token
      * @return {[type]} [description]
      */
-    function refreshToken(){
-      let token=$.fn.cookie("token");
-      if(!token){
-        console.warn("没有获取到token，请重新登录！");
-        return false;
-      }
-      let url="http://api.scuplus.cn/token/refresh";
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data: {token:token},
-        success:function(r){
-          console.log(r);
-          if(r.status==1){
-              _this.toastType="success";
-              $.fn.cookie('token',r.data.token);
-          }
-        },
-        error:function(x,t,e) {
-          console.warn(x);
+    function refreshToken() {
+        let token = $.fn.cookie("token");
+        if (!token) {
+            console.warn("没有获取到token，请重新登录！");
+            return false;
         }
-      });
+        let url = "http://api.scuplus.cn/token/refresh";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                token: token
+            },
+            success: function(r) {
+                console.log(r);
+                if (r.status == 1) {
+                    _this.toastType = "success";
+                    $.fn.cookie('token', r.data.token);
+                }
+            },
+            error: function(x, t, e) {
+                console.warn(x);
+            }
+        });
 
     }
 
@@ -62,78 +64,85 @@
                 btnText: "登录",
                 isDisabled: false,
                 user: "",
-                toast:'toast',
-                toastShow:false,
-                password:"",
-                toastType:"warn"
+                toast: 'toast',
+                toastShow: false,
+                password: "",
+                toastType: "warn"
             }
         },
         methods: {
             userCheck: function() {
-              //清空
-              param.email="";
-              param.phone="";
-              const reg_email=/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/;
-              const reg_phone=/0?(13|14|15|17|18)[0-9]{9}/;
-              let user = this.user;
-              let is_email=reg_email.test(user);
-              if(is_email){
-                param.email=user;
-              }else{
-                let is_phone=reg_phone.test(user);
-                if(is_phone){
-                  param.phone=user;
-                }else{
-                  this.toast="请输入正确的手机号或邮箱地址！";
-                  this.toastShow=true;
+                //清空
+                param.email = "";
+                param.phone = "";
+                const reg_email = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/;
+                const reg_phone = /0?(13|14|15|17|18)[0-9]{9}/;
+                let user = this.user;
+                let is_email = reg_email.test(user);
+                if (is_email) {
+                    param.email = user;
+                } else {
+                    let is_phone = reg_phone.test(user);
+                    if (is_phone) {
+                        param.phone = user;
+                    } else {
+                        this.toastType = "warn";
+                        this.toast = "请输入正确的手机号或邮箱地址！";
+                        this.toastShow = true;
+                    }
                 }
-              }
             },
             login: function() {
 
                 const _this = this;
-                let loginType=1;
-                if(!(param.phone || param.email)){
-                  this.toast="请输入正确的手机号或邮箱地址！";
-                  this.toastShow=true;
-                  return false;
+                let loginType = 1;
+                if (!(param.phone || param.email)) {
+                    this.toast = "请输入正确的手机号或邮箱地址！";
+                    this.toastShow = true;
+                    return false;
                 }
-                if(param.phone){
-                  loginType=2;
+                if (param.phone) {
+                    loginType = 2;
                 }
 
-                let url="http://api.scuplus.cn/login/"+loginType;
-                param.password= md5(this.password);
+                let url = "http://api.scuplus.cn/login/" + loginType;
+                param.password = md5(this.password);
 
                 this.btnText = "登录中请稍候...";
-                this.isDisabled=true;
+                this.isDisabled = true;
                 $.ajax({
-                  url: url,
-                  type: 'POST',
-                  data: param,
-                  success:function(r){
-                    console.log(r);
-                    if(r.status==1){
-                        _this.toastType="success";
-                        $.fn.cookie('token',r.data.token);
-                        setInterval(refreshToken,59*1000*60*2);//不到两小时刷新一次
+                    url: url,
+                    type: 'POST',
+                    data: param,
+                    success: function(r) {
+                        console.log(r);
+                        if (r.status == 1) {
+                            _this.toastType = "success";
+                            $.fn.cookie('token', r.data.token, {
+                                expires:(1/12)
+                            });
+                            setTimeout(function() {
+                                location.href = "/#!/user";
+                            });
+
+                            setInterval(refreshToken, 59 * 1000 * 60 * 2); //不到两小时刷新一次
+                        }
+                        _this.toast = r.msg;
+                        _this.toastShow = true;
+                    },
+                    error: function(x, t, e) {
+                        _this.toast = "服务器错误！";
+                        if (x.status == 422) {
+                            _this.toast = "参数错误！";
+                        }
+                        _this.toastShow = true;
+                    },
+                    complete: function() {
+                        _this.isDisabled = false;
+                        _this.btnText = "登录";
                     }
-                    _this.toast=r.msg;
-                    _this.toastShow=true;
-                  },
-                  error:function(x,t,e) {
-                    _this.toast="服务器错误！";
-                    if(x.status==422){
-                      _this.toast="参数错误！";
-                    }
-                    _this.toastShow=true;
-                  },
-                  complete:function(){
-                    _this.isDisabled=false;
-                    _this.btnText= "登录";
-                  }
                 });
-                              
+
             }
         }
     }
