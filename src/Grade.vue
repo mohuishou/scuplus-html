@@ -2,97 +2,105 @@
   <div id="grade">
     <div v-for="grade in grades" >
       <table class="table table-resposive table-bordered">
-      <caption><b>{{grade.grades[0].term}}</b></caption>
-      <thead @click="chooseTable">
-        <tr class="score">
-          <td class="all_gpa" colspan="1">全部绩点: {{grade.avg.all.gpa}}</td>
-          <td class="all_ave" colspan="4">全部平均分: {{grade.avg.all.grade}}</td>
-        </tr>
-        <tr>
-          <td class="required_gpa" colspan="1">必修绩点: {{grade.avg.required.gpa}}</td>
-          <td class="required_ave" colspan="4">必修平均分: {{grade.avg.required.grade}}</td>
-        </tr>
-        <tr class="title">
-          <th>课程名</th>
-          <th>分数</th>
-          <th>绩点</th>
-          <th>学分</th>
-          <th>属性</th>
-        </tr>
-        <tbody>
-          <tr v-for="g in grade.grades" type="{{ g.courseType=='必修' ? 1 : 0}}" @click="choose" >
-            <td >{{g.name}}</td>
-
-            <td class="grade" grade="{{ g.gradeCal }}">{{g.grade}}</td>
-
-            <td class="gpa">{{ g.gpa }}</td>
-
-            <td class="credit">{{ g.credit }}</td>
-
-            <td class="courseType">{{ g.courseType }}</td>
+        <caption> <b>{{grade.grades[0].term}}</b>
+        </caption>
+        <thead @click="chooseTable">
+          <tr class="score">
+            <td class="all_gpa" colspan="1">全部绩点: {{grade.avg.all.gpa}}</td>
+            <td class="all_ave" colspan="4">全部平均分: {{grade.avg.all.grade}}</td>
           </tr>
+          <tr>
+            <td class="required_gpa" colspan="1">必修绩点: {{grade.avg.required.gpa}}</td>
+            <td class="required_ave" colspan="4">必修平均分: {{grade.avg.required.grade}}</td>
+          </tr>
+          <tr class="title">
+            <th>课程名</th>
+            <th>分数</th>
+            <th>绩点</th>
+            <th>学分</th>
+            <th>属性</th>
+          </tr>
+          <tbody>
+            <tr v-for="g in grade.grades" type="{{ g.courseType=='必修' ? 1 : 0}}" @click="choose" >
+              <td >{{g.name}}</td>
 
-          
-          
-        </tbody>
-        
-      </thead>
-    </table>
+              <td class="grade" grade="{{ g.gradeCal }}">{{g.grade}}</td>
+
+              <td class="gpa">{{ g.gpa }}</td>
+
+              <td class="credit">{{ g.credit }}</td>
+
+              <td class="courseType">{{ g.courseType }}</td>
+            </tr>
+
+          </tbody>
+
+        </thead>
+      </table>
     </div>
     <br />
-  
 
-  <!-- 底部 -->
+    <!-- 底部 -->
     <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
-    <!--use v-link-->
-    <tabbar-item @click="chooseRequired">
-      <img slot="icon" src="assets/img/required.png">
-      <span slot="label">必修</span>
-    </tabbar-item>
-    <!--use http link-->
-    <tabbar-item @click="calculation">
-      <img slot="icon" src="assets/img/cal.png">
-      <span slot="label">计算</span>
-    </tabbar-item>
-    <!--use vue-router link-->
-    <tabbar-item @click="help">
-      <img slot="icon" src="assets/img/help.png">
-      <span slot="label">帮助</span>
-    </tabbar-item>
-    <!--use vue-router object link-->
-    <tabbar-item link="/user">
-      <img slot="icon" src="assets/img/user.png">
-      <span slot="label">个人中心</span>
-    </tabbar-item>
-  </tabbar>
-  <div>
-    <alert alert :show.sync="helpShow" title="帮助" button-text="我已阅读">
-      <div class="help">
-        <div>
-           <strong>计算方法：</strong>
-          <p>加权平均分 = ∑(成绩 * 课程学分) / ∑课程学分</p>
-          <p>绩点 = ∑(绩点 * 课程学分) / ∑课程学分</p>
-          
+      <!--use v-link-->
+      <tabbar-item @click="chooseRequired">
+        <img slot="icon" src="assets/img/required.png">
+        <span slot="label">必修</span>
+      </tabbar-item>
+
+      <!--use http link-->
+      <tabbar-item @click="calculation">
+        <img slot="icon" src="assets/img/cal.png">
+        <span slot="label">计算</span>
+      </tabbar-item>
+
+      <!--use vue-router link-->
+      <tabbar-item @click="help">
+        <img slot="icon" src="assets/img/help.png">
+        <span slot="label">帮助</span>
+      </tabbar-item>
+
+      <!--use v-link-->
+      <tabbar-item @click="update">
+        <img slot="icon" src="assets/img/update.png">
+        <span slot="label">更新</span>
+      </tabbar-item>
+      <!--use vue-router object link-->
+      <tabbar-item link="/user">
+        <img slot="icon" src="assets/img/user.png">
+        <span slot="label">个人中心</span>
+      </tabbar-item>
+    </tabbar>
+    <div>
+      <alert alert :show.sync="helpShow" title="帮助" button-text="我已阅读">
+        <div class="help">
+          <div> <strong>计算方法：</strong>
+            <p>加权平均分 = ∑(成绩 * 课程学分) / ∑课程学分</p>
+            <p>绩点 = ∑(绩点 * 课程学分) / ∑课程学分</p>
+
+          </div>
+          <div> <strong>操作说明：</strong>
+            <p>点击每行选中需要计算的数据，点击下方计算按钮计算</p>
+            <p>点击每一学期的平均分/绩点 显示栏，该学期课程全选/全不选</p>
+          </div>
+          <div> <strong>更新说明：</strong>
+            <p>点击底部更新按钮，服务器将会从教务处自动抓取最新成绩信息，可能由于教务链接问题更新速度可能稍慢</p>
+          </div>
+
         </div>
-        <div>
-          <strong>操作说明：</strong> 
-          <p>点击每行选中需要计算的数据，点击下方计算按钮计算</p>
-          <p>点击每一学期的平均分/绩点 显示栏，该学期课程全选/全不选</p>
+      </alert>
+    </div>
+    <div>
+      <alert alert :show.sync="resultShow" title="计算结果" button-text="我已阅读">
+        <div class="result">
+          <p>您选择了{{sum.classNum}} 门课程，总共{{sum.credit}} 学分：</p>
+          <p>平均绩点为：{{avg.gpa}}</p>
+          <p>平均成绩为：{{avg.grade}}</p>
         </div>
-        
-      </div>
-    </alert>
+      </alert>
+    </div>
+    <loading :show="loadingShow" :text="loading"></loading>
   </div>
-  <div>
-    <alert alert :show.sync="resultShow" title="计算结果" button-text="我已阅读">
-      <div class="result">
-        <p>您选择了{{sum.classNum}} 门课程，总共{{sum.credit}} 学分：</p>
-        <p>平均绩点为：{{avg.gpa}}</p>
-        <p>平均成绩为：{{avg.grade}}</p>
-      </div>
-    </alert>
-  </div>
-</div>
 </template>
 
 <script>
@@ -267,7 +275,9 @@
             avg:{
               gpa:0,
               grade:0
-            }
+            },
+            loading:"获取中，请稍候",
+            loadingShow:false
           }
         },
         methods:{
@@ -329,6 +339,36 @@
           //帮助
           help:function(){
             this.helpShow=true;
+          },
+
+          //更新成绩
+          update:function(){
+            let url = "http://api.scuplus.cn/jwc/grade";
+            let _this=this;
+            this.loadingShow=true;
+            $.ajax({
+                url: url,
+                data: {
+                    token: storage.get("token")
+                },
+                type: 'post',
+                success: function(r) {
+                    console.log(r);
+                    if (r.status == 1) {
+                      let grade=calGrade(r.data);
+                      storage.set("grade",grade);
+                      _this.grade=grade;
+                      _this.loadingShow=false;
+                    }
+
+                },
+                error: function(x, t, e) {
+                  console.log(x);
+                },
+                complete: function() {
+
+                }
+            });
           }
         },
         computed:{
