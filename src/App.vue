@@ -12,7 +12,7 @@
     <router-view ></router-view>
 
     <!-- 底部 -->
-      <tabbar v-show="tabbarShow"  id="tabbar" icon-class="vux-center"  slot="bottom">
+      <tabbar v-if="tabbarShow"  id="tabbar" icon-class="vux-center"  slot="bottom">
       <!--use v-link-->
       <tabbar-item selected link="/">
         <img slot="icon" src="assets/img/class-selected.png">
@@ -91,6 +91,14 @@ export default {
     }
   },
   computed: {
+    tabbarShow(){
+      let path=(this.$route.path.split("/"))[1];
+      if(path in needTabbar){
+          return false;
+        }else{
+          return true;
+        }
+    },
     title () {
         let path=(this.$route.path.split("/"))[1];
 
@@ -98,12 +106,7 @@ export default {
           let token=storage.get("token");
           common.isLogin(token,true);
         }
-
-        if(path in needTabbar){
-          this.tabbarShow=false;
-        }else{
-          this.tabbarShow=true;
-        }
+        
 
         if(path in titles){
           return titles[path];
