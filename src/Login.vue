@@ -18,6 +18,7 @@
     import XButton from 'vux/src/components/x-button'
     import Toast from 'vux/src/components/toast'
     import md5 from "md5"
+    import storage from "./js/storage"
     let param = {};
 
     /**
@@ -25,7 +26,7 @@
      * @return {[type]} [description]
      */
     function refreshToken() {
-        let token = $.fn.cookie("token");
+        let token = storage.get("token");
         if (!token) {
             console.warn("没有获取到token，请重新登录！");
             return false;
@@ -33,15 +34,15 @@
         let url = "http://api.scuplus.cn/token/refresh";
         $.ajax({
             url: url,
-            type: 'POST',
+            type: 'GET',
             data: {
                 token: token
             },
             success: function(r) {
                 console.log(r);
                 if (r.status == 1) {
-                    _this.toastType = "success";
-                    $.fn.cookie('token', r.data.token);
+                    storage.set("token",r.data.token);
+                    console.log("token获取成功！");
                 }
             },
             error: function(x, t, e) {
@@ -118,14 +119,12 @@
                         console.log(r);
                         if (r.status == 1) {
                             _this.toastType = "success";
-                            $.fn.cookie('token', r.data.token, {
-                                expires:(1/12)
-                            });
+                            storage.set("token",r.data.token);
                             setTimeout(function() {
                                 location.href = "/#!/user";
-                            });
+                            },1500);
 
-                            setInterval(refreshToken, 59 * 1000 * 60 * 2); //不到两小时刷新一次
+                            setInterval(refreshToken, 59*1000*60*2); //不到两小时刷新一次
                         }
                         _this.toast = r.msg;
                         _this.toastShow = true;

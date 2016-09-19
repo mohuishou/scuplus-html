@@ -12,7 +12,7 @@
     <router-view ></router-view>
 
     <!-- 底部 -->
-      <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
+      <tabbar v-show="tabbarShow"  id="tabbar" icon-class="vux-center"  slot="bottom">
       <!--use v-link-->
       <tabbar-item selected link="/">
         <img slot="icon" src="assets/img/class-selected.png">
@@ -44,6 +44,8 @@ import Cell from 'vux/src/components/cell'
 import XHeader from  'vux/src/components/x-header'
 import ViewBox from 'vux/src/components/view-box'
 import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
+import common from "./js/common"
+import storage from "./js/storage.js"
 
 /**
  * 标题
@@ -59,6 +61,17 @@ const titles={
   "bind-jwc":"绑定教务处"
 };
 
+const needTokens={
+  exam:'考表',
+  search:'搜索',
+  grade:"成绩",
+  schedule:"课程表",
+  "bind-jwc":"绑定教务处"
+};
+
+const needTabbar={
+  grade:"成绩"
+}
 export default {
   components: {
     Group,
@@ -71,7 +84,8 @@ export default {
   data (){
     return {
       test:{
-        showBack:false
+        showBack:false,
+        tabbarShow:true
       },
       title:'scuplus'
     }
@@ -79,6 +93,18 @@ export default {
   computed: {
     title () {
         let path=(this.$route.path.split("/"))[1];
+
+        if(path in needTokens){
+          let token=storage.get("token");
+          common.isLogin(token,true);
+        }
+
+        if(path in needTabbar){
+          this.tabbarShow=false;
+        }else{
+          this.tabbarShow=true;
+        }
+
         if(path in titles){
           return titles[path];
         }
