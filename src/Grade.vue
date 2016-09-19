@@ -108,6 +108,7 @@
     import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
     import Dialog from 'vux/src/components/dialog'
     import Alert from 'vux/src/components/alert'
+    import Loading from  'vux/src/components/loading'
     //成绩计算
     function calGrade(data) {
         let termId = 1;
@@ -172,6 +173,7 @@
             grade[k-1].grades=t;
 
         }
+        console.log(grade);
 
         return grade;
     }
@@ -200,9 +202,10 @@
         }
       return gpa;
     }
-
+    function trimStr(str){return str.replace(/(^\s*)|(\s*$)/g,"");}
     //绩点分数转换
     function lv2grade(g) {
+        g=trimStr(g);
         if (!isNaN(g)) {
             return g;
         }
@@ -259,11 +262,11 @@
     export default {
       components: {
         Tabbar,
-        TabbarItem,Alert
+        TabbarItem,Alert,Loading 
       },
         data() {
           return {
-            grades:123,
+            grades:{},
             resultShow:false,
             helpShow:true,
             sum:{
@@ -356,7 +359,7 @@
                     console.log(r);
                     if (r.status == 1) {
                       let grade=calGrade(r.data);
-                      storage.set("grade",grade);
+                      storage.set("grade",JSON.stringify(grade));
                       _this.grade=grade;
                       _this.loadingShow=false;
                     }
@@ -440,7 +443,7 @@
             border: none;
         }
         .choose{
-          background:#e3e3e3 !important;
+          background:#ccc !important;
         }
         .result,.help{
           color:#333244;
