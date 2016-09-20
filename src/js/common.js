@@ -8,7 +8,7 @@ common.isLogin=function(token,isJump) {
 			alert("用户尚未登录！");
         	location.href="/#!/login";
 		}
-        r=false;
+        return false;
 	}
 	let url = "http://api.scuplus.cn/jwc/grade";
         $.ajax({

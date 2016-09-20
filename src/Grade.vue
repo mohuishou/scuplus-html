@@ -249,9 +249,6 @@
             },
             error: function(x, t, e) {
               console.log(x);
-            },
-            complete: function() {
-
             }
         });
     }
@@ -310,7 +307,8 @@
 
           //选择所有必修
           chooseRequired:function(){
-            $("tr[type='1']").removeClass('choose').addClass('choose');
+            $("tr").removeClass("choose");
+            $("tr[type='1']").addClass('choose');
           },
 
           //计算已选择的成绩
@@ -443,7 +441,7 @@
             border: none;
         }
         .choose{
-          background:#ccc !important;
+          background:#ececec !important;
         }
         .result,.help{
           color:#333244;
