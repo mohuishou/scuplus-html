@@ -1,83 +1,139 @@
 <template>
   <div id="schedule">
     {{{ schedule_html }}}
+
+
+    
+    <!-- 底部 -->
+    <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
+  
+      <!--use http link-->
+      <tabbar-item >
+        <img slot="icon" src="assets/img/cal.png">
+        <span slot="label">导出</span>
+      </tabbar-item>
+
+      <!--use vue-router link-->
+      <tabbar-item @click="help">
+        <img slot="icon" src="assets/img/help.png">
+        <span slot="label">帮助</span>
+      </tabbar-item>
+
+      <!--use v-link-->
+      <tabbar-item @click="update">
+        <img slot="icon" src="assets/img/update.png">
+        <span slot="label">更新</span>
+      </tabbar-item>
+      <!--use vue-router object link-->
+      <tabbar-item link="/user">
+        <img slot="icon" src="assets/img/user.png">
+        <span slot="label">个人中心</span>
+      </tabbar-item>
+    </tabbar>
+
+     <!--帮助-->
+    <div>
+      <alert alert :show.sync="helpShow" title="帮助" button-text="我已阅读">
+        <div class="help">
+          <div> <strong>导出说明：</strong>
+            <p>点击底部导出按钮，服务器将自动生成ical文件链接</p>
+            <p>详细的使用教程点击查看</p>
+          </div>
+          <div> <strong>更新说明：</strong>
+            <p>点击底部更新按钮，服务器将会从教务处自动抓取最新课程表信息，可能由于教务链接问题更新速度可能稍慢</p>
+          </div>
+
+        </div>
+      </alert>
+    </div>
+    <!--帮助 end-->
   </div>
+
+
+    
 
 </template>
 
 
-<style lang="less">
-  
-  #schedule{
-    background: #fff;
-    padding: 10px;
-    width: 100%;
-  }
-
-  #schedule{
-
-    .id{
-      min-width: 30px;
-    }
-
-    table {
-      background: #fff;
-      border: 1px solid #ccc;
-      width:95%;
-      margin:0;
-      padding:0;
-      border-collapse: collapse;
-      border-spacing: 0;
-      margin: 0 auto;
-      font-size:12px;
-      color: #333244;
-    }
-    table tr ,table caption{
-      border: 1px solid #ddd;
-      padding: 5px;
-    }
-    table th, table td {
-      padding:5px 8px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-    table th {
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    table caption{
-      background: #495c70;
-      color: #fff;
-      border-bottom: none;
-      font-size: 16px;
-    }
-    
-    table .title{
-      border: 1px solid #ddd;
-    }
-  }
-  
-
-  #schedule td{
-    min-width:70px;
-  }
-
-  
-</style>
 
 <script>
+  import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
+  import storage from "./js/storage"
+  import Dialog from 'vux/src/components/dialog'
+    import Alert from 'vux/src/components/alert'
+function getSchedule() {
+        let url = "http://api.scuplus.cn/jwc/schedule";
+        let data;
+        $.ajax({
+            url: url,
+            async:false,
+            data: {
+                token: storage.get("token")
+            },
+            type: 'get',
+            success: function(r) {
+                console.log(r);
+                if (r.status == 1) {
+                  data=r.data;
+                }
 
+            },
+            error: function(x, t, e) {
+              console.log(x);
+            }
+        });
+        return data;
+    }
 
 export default {
+  components: {
+        Tabbar,
+        TabbarItem,Alert,Dialog
+      },
   data () {
     return {
+      helpShow:true
     }
+  },
+  methods:{
+     //帮助
+    help:function(){
+       this.helpShow=true;
+    },
+    //更新成绩
+          update:function(){
+            let url = "http://api.scuplus.cn/jwc/schedule";
+            let _this=this;
+            this.loadingShow=true;
+            $.ajax({
+                url: url,
+                data: {
+                    token: storage.get("token")
+                },
+                type: 'post',
+                success: function(r) {
+                    console.log(r);
+                    if (r.status == 1) {
+                      let grade=calGrade(r.data);
+                      storage.set("grade",JSON.stringify(grade));
+                      _this.grade=grade;
+                      _this.loadingShow=false;
+                    }
+
+                },
+                error: function(x, t, e) {
+                  console.log(x);
+                },
+                complete: function() {
+
+                }
+            });
+          }
   },
   computed:{
     schedule_html (){
       let schedule_data;
+      schedule_data=getSchedule();
       if(!schedule_data){
         return null;
       }
@@ -143,3 +199,67 @@ function schedule(d) {
   return html;
 }
 </script>
+
+
+<style lang="less">
+  
+  #schedule{
+    background: #fff;
+    padding: 10px;
+    width: 100%;
+  }
+
+  #schedule{
+    .help{
+      text-align:left;
+    }
+    .id{
+      min-width: 30px;
+    }
+
+    table {
+      background: #fff;
+      border: 1px solid #ccc;
+      width:95%;
+      margin:0;
+      padding:0;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin: 0 auto;
+      font-size:12px;
+      color: #333244;
+    }
+    table tr ,table caption{
+      border: 1px solid #ddd;
+      padding: 5px;
+    }
+    table th, table td {
+      padding:5px 8px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    table th {
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    table caption{
+      background: #495c70;
+      color: #fff;
+      border-bottom: none;
+      font-size: 16px;
+    }
+    
+    table .title{
+      border: 1px solid #ddd;
+    }
+  }
+  
+
+  #schedule td{
+    min-width:70px;
+  }
+
+  
+</style>

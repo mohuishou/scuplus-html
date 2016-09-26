@@ -71,6 +71,8 @@
         <span slot="label">个人中心</span>
       </tabbar-item>
     </tabbar>
+
+    <!--帮助-->
     <div>
       <alert alert :show.sync="helpShow" title="帮助" button-text="我已阅读">
         <div class="help">
@@ -90,6 +92,8 @@
         </div>
       </alert>
     </div>
+    <!--帮助 end-->
+
     <div>
       <alert alert :show.sync="resultShow" title="计算结果" button-text="我已阅读">
         <div class="result">
@@ -253,9 +257,6 @@
         });
     }
 
-    $(document).ready(function(){
-
-    });
     export default {
       components: {
         Tabbar,

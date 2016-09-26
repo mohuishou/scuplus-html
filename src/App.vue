@@ -61,16 +61,23 @@ const titles={
   "bind-jwc":"绑定教务处"
 };
 
+/**
+ * 需要登陆之后的token才能使用的
+ */
 const needTokens={
   exam:'考表',
   search:'搜索',
   grade:"成绩",
   schedule:"课程表",
-  "bind-jwc":"绑定教务处"
+  "bind-jwc":"绑定教务处",
 };
 
+/**
+ * 需要改变底部的tabbar的
+ */
 const needTabbar={
-  grade:"成绩"
+  grade:"成绩",
+  schedule:"课程表"
 }
 export default {
   components: {
