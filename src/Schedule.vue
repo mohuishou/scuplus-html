@@ -8,7 +8,7 @@
     <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
   
       <!--use http link-->
-      <tabbar-item >
+      <tabbar-item @click="icalExport" >
         <img slot="icon" src="assets/img/cal.png">
         <span slot="label">导出</span>
       </tabbar-item>
@@ -47,6 +47,20 @@
       </alert>
     </div>
     <!--帮助 end-->
+    <!--导出 ical-->
+    <div>
+      <alert alert :show.sync="icalShow" title="导出结果" button-text="我已阅读">
+        <div class="help">
+          <div> <strong>导出成功：</strong>
+            <a href="{{icalLink}}">{{icalLink}}</a>
+            <p>详细的使用教程点击查看</p>
+          </div>
+          <div>
+        </div>
+      </alert>
+    </div>
+    <!--export ical end-->
+    <loading :show="loadingShow" :text="loading"></loading>
   </div>
 
 
@@ -60,39 +74,43 @@
   import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
   import storage from "./js/storage"
   import Dialog from 'vux/src/components/dialog'
-    import Alert from 'vux/src/components/alert'
-function getSchedule() {
-        let url = "http://api.scuplus.cn/jwc/schedule";
-        let data;
-        $.ajax({
-            url: url,
-            async:false,
-            data: {
-                token: storage.get("token")
-            },
-            type: 'get',
-            success: function(r) {
-                console.log(r);
-                if (r.status == 1) {
-                  data=r.data;
-                }
+  import Alert from 'vux/src/components/alert'
+  import common from './js/common'
+  import Loading from 'vux/src/components/loading'
+  let icalurl="/jwc/schedule/ics";
+  function getIcalUrl() {
+    // body...
+  }
+  function getSchedule() {
+      let url = "http://api.scuplus.cn/jwc/schedule";
+      let data;
+      common.get(url,null,false,function(e,r){
+        if(e!=null){
 
-            },
-            error: function(x, t, e) {
-              console.log(x);
-            }
-        });
-        return data;
-    }
+        }else{
+          data=r.data;
+        }
+      });
+      return data;
+      
+  }
 
 export default {
   components: {
         Tabbar,
-        TabbarItem,Alert,Dialog
-      },
+        TabbarItem,
+        Alert,
+        Dialog,
+        Loading
+    },
   data () {
     return {
-      helpShow:true
+      helpShow:true,
+      icalShow:false,
+      icalLink:"",
+      loadingShow:false,
+      loading:"请稍后",
+      schedule_html:{}
     }
   },
   methods:{
@@ -100,35 +118,32 @@ export default {
     help:function(){
        this.helpShow=true;
     },
+    icalExport:function(){
+      this.icalShow=true;
+    },
     //更新成绩
-          update:function(){
-            let url = "http://api.scuplus.cn/jwc/schedule";
-            let _this=this;
-            this.loadingShow=true;
-            $.ajax({
-                url: url,
-                data: {
-                    token: storage.get("token")
-                },
-                type: 'post',
-                success: function(r) {
-                    console.log(r);
-                    if (r.status == 1) {
-                      let grade=calGrade(r.data);
-                      storage.set("grade",JSON.stringify(grade));
-                      _this.grade=grade;
-                      _this.loadingShow=false;
-                    }
+    update:function(){
+      let url = "http://api.scuplus.cn/jwc/schedule";
+      let _this=this;
+      this.loadingShow=true;
+      common.post(url,null,true,function(e,r){
+        console.log(r);
+        _this.loadingShow=false;
+        if(e){
+          _this.$vux.toast.show({
+            text:e,
+            type:"warn"
+          });
+        }else{
+           _this.$vux.toast.show({
+            text:"更新成功！",
+          });
+          _this.schedule_html=r.data;
+        }
 
-                },
-                error: function(x, t, e) {
-                  console.log(x);
-                },
-                complete: function() {
-
-                }
-            });
-          }
+      });
+    
+    }
   },
   computed:{
     schedule_html (){

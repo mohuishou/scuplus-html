@@ -111,6 +111,7 @@
 
                 this.btnText = "登录中请稍候...";
                 this.isDisabled = true;
+                let backUrl=location.search;
                 $.ajax({
                     url: url,
                     type: 'POST',
@@ -121,7 +122,7 @@
                             _this.toastType = "success";
                             storage.set("token",r.data.token);
                             setTimeout(function() {
-                                location.href = "/#!/user";
+                                location.href = backUrl;
                             },1500);
 
                             setInterval(refreshToken, 59*1000*60*2); //不到两小时刷新一次

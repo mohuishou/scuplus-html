@@ -12,8 +12,9 @@ import Schedule from './Schedule'
 import Register from './Register'
 import BindJwc from './BindJwc'
 import User from './User'
-
+import ToastPlugin from 'vux/src/plugins/toast'
 Vue.use(Router);
+Vue.use(ToastPlugin)
 const router = new Router({
 	transitionOnLoad: false,
 	suppressTransitionError: true

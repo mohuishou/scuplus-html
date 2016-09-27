@@ -109,72 +109,75 @@
 
 <script>
     import storage from "./js/storage"
-    import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
+    import {
+        Tabbar,
+        TabbarItem
+    } from 'vux/src/components/tabbar'
     import Dialog from 'vux/src/components/dialog'
     import Alert from 'vux/src/components/alert'
-    import Loading from  'vux/src/components/loading'
+    import Loading from 'vux/src/components/loading'
     //成绩计算
     function calGrade(data) {
         let termId = 1;
         let grade = [];
-        
+
         for (let k = 1; k < 12; k++) {
             let sum = {
-              all:{
-                grade: 0,
-                credit: 0,
-                gpa: 0
-              },
-              required:{
-                grade: 0,
-                credit: 0,
-                gpa: 0
-              }
-                
+                all: {
+                    grade: 0,
+                    credit: 0,
+                    gpa: 0
+                },
+                required: {
+                    grade: 0,
+                    credit: 0,
+                    gpa: 0
+                }
+
             };
-            let avg={
-              all:{
-                grade: 0,
-                gpa: 0
-              },
-              required:{
-                grade: 0,
-                gpa: 0
-              }
-              
+            let avg = {
+                all: {
+                    grade: 0,
+                    gpa: 0
+                },
+                required: {
+                    grade: 0,
+                    gpa: 0
+                }
+
             };
-            let t=[];
+            let t = [];
             for (let i = 0; i < data.length; i++) {
                 let d = data[i];
                 if (d.termId != k) {
                     continue;
                 }
-                d.gradeCal=lv2grade(d.grade);
-                d.gpa=grade2gpa(d.gradeCal);
-                d.credit=parseInt(d.credit);
+                d.gradeCal = lv2grade(d.grade);
+                d.gpa = grade2gpa(d.gradeCal);
+                d.credit = parseInt(d.credit);
                 t.push(d);
-                if(d.courseType=="必修"){
-                  sum.required.grade += d.gradeCal*d.credit;
-                  sum.required.credit += d.credit;
-                  sum.required.gpa += d.gpa*d.credit;
+                if (d.courseType == "必修") {
+                    sum.required.grade += d.gradeCal * d.credit;
+                    sum.required.credit += d.credit;
+                    sum.required.gpa += d.gpa * d.credit;
                 }
-                sum.all.grade += d.gradeCal*d.credit;
+                sum.all.grade += d.gradeCal * d.credit;
                 sum.all.credit += d.credit;
-                sum.all.gpa += d.gpa*d.credit;
+                sum.all.gpa += d.gpa * d.credit;
             }
-            if(!t[0]){
-              return grade;
+            if (!t[0]) {
+                return grade;
             }
             //计算平均分保留两位小数
-            avg.all.gpa=(sum.all.gpa/sum.all.credit).toFixed(2);
-            avg.all.grade=(sum.all.grade/sum.all.credit).toFixed(2);
+            avg.all.gpa = (sum.all.gpa / sum.all.credit).toFixed(2);
+            avg.all.grade = (sum.all.grade / sum.all.credit).toFixed(2);
 
-            avg.required.gpa=(sum.required.gpa/sum.required.credit).toFixed(2);
-            avg.required.grade=(sum.required.grade/sum.required.credit).toFixed(2);
-            grade[k-1]={}
-            grade[k-1].avg=avg;
-            grade[k-1].sum=sum;
-            grade[k-1].grades=t;
+            avg.required.gpa = (sum.required.gpa / sum.required.credit).toFixed(2);
+            avg.required.grade = (sum.required.grade / sum.required.credit).toFixed(2);
+            grade[k - 1] = {}
+            grade[k - 1].avg = avg;
+            grade[k - 1].sum = sum;
+            grade[k - 1].grades = t;
 
         }
         console.log(grade);
@@ -184,32 +187,35 @@
 
     //分数绩点转换
     function grade2gpa(grade) {
-      var gpa = 0;
-      if(grade >= 95){
-          gpa = 4.0;
-        }else if(grade >= 90 && grade <= 94){
-          gpa = 3.8;
-        }else if(grade >= 85 && grade <= 89){
-          gpa = 3.6;
-        }else if(grade >= 80 && grade <= 84){
-          gpa = 3.2;
-        }else if(grade >= 75 && grade <= 79){
-          gpa = 3.2;
-        }else if(grade >= 70 && grade <= 74){
-          gpa = 2.7;
-        }else if(grade >= 65 && grade <= 69){
-          gpa = 2.2;
-        }else if(grade >= 60 && grade <= 64){
-          gpa = 1.7;
-        }else if(grade <60){
-          gpa = 1;
+        var gpa = 0;
+        if (grade >= 95) {
+            gpa = 4.0;
+        } else if (grade >= 90 && grade <= 94) {
+            gpa = 3.8;
+        } else if (grade >= 85 && grade <= 89) {
+            gpa = 3.6;
+        } else if (grade >= 80 && grade <= 84) {
+            gpa = 3.2;
+        } else if (grade >= 75 && grade <= 79) {
+            gpa = 3.2;
+        } else if (grade >= 70 && grade <= 74) {
+            gpa = 2.7;
+        } else if (grade >= 65 && grade <= 69) {
+            gpa = 2.2;
+        } else if (grade >= 60 && grade <= 64) {
+            gpa = 1.7;
+        } else if (grade < 60) {
+            gpa = 1;
         }
-      return gpa;
+        return gpa;
     }
-    function trimStr(str){return str.replace(/(^\s*)|(\s*$)/g,"");}
+
+    function trimStr(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
     //绩点分数转换
     function lv2grade(g) {
-        g=trimStr(g);
+        g = trimStr(g);
         if (!isNaN(g)) {
             return g;
         }
@@ -232,13 +238,12 @@
         }
         return g;
     }
-
     //获取成绩
     function getGrade(callback) {
         let url = "http://api.scuplus.cn/jwc/grade";
         $.ajax({
             url: url,
-            async:false,
+            async: false,
             data: {
                 token: storage.get("token")
             },
@@ -246,148 +251,150 @@
             success: function(r) {
                 console.log(r);
                 if (r.status == 1) {
-                  let grade=calGrade(r.data);
-                  callback(grade);
+                    let grade = calGrade(r.data);
+                    callback(grade);
                 }
 
             },
             error: function(x, t, e) {
-              console.log(x);
+                console.log(x);
             }
         });
     }
 
     export default {
-      components: {
-        Tabbar,
-        TabbarItem,Alert,Loading 
-      },
+        components: {
+            Tabbar,
+            TabbarItem,
+            Alert,
+            Loading
+        },
         data() {
-          return {
-            grades:{},
-            resultShow:false,
-            helpShow:true,
-            sum:{
-              gpa:0,
-              grade:0,
-              credit:0,
-              classNum:0
-            },
-            avg:{
-              gpa:0,
-              grade:0
-            },
-            loading:"获取中，请稍候",
-            loadingShow:false
-          }
-        },
-        methods:{
-          //点击选择
-          choose:function(t){
-            let tr=t.path[1];
-            $(tr).toggleClass('choose');
-          },
-
-          //选择一学期
-          chooseTable:function(t){
-            let table=t.path[3];
-            let i=0;
-            $(table).find('tbody tr').each(function(index, el) {
-              if($(el).hasClass('choose')){
-                $(el).removeClass('choose');
-                i++;
-              }
-            });
-            if(i==0){
-              $(table).find('tbody tr').each(function(index, el) {
-                $(el).addClass('choose');
-              });
-            }
-            console.log(table);
-          },
-
-          //选择所有必修
-          chooseRequired:function(){
-            $("tr").removeClass("choose");
-            $("tr[type='1']").addClass('choose');
-          },
-
-          //计算已选择的成绩
-          calculation:function(){
-            let sum={
-              gpa:0,
-              grade:0,
-              credit:0,
-              classNum:0
-            };
-            let avg={
-              gpa:0,
-              grade:0
-            }
-            $("tr[class='choose']").each(function(i,e){
-              let credit=parseInt($(e).children('.credit').text());
-              sum.credit+=parseInt($(e).children('.credit').text());
-              sum.gpa+=parseInt($(e).children('.gpa').text())*credit;
-              sum.grade+=parseInt($(e).children('.grade').attr("grade"))*credit;
-              sum.classNum++;
-            });
-            avg.gpa=(sum.gpa/sum.credit).toFixed(2);
-            avg.grade=(sum.grade/sum.credit).toFixed(2);
-            this.sum=sum;
-            this.avg=avg;
-            this.resultShow=true;
-          },
-
-          //帮助
-          help:function(){
-            this.helpShow=true;
-          },
-
-          //更新成绩
-          update:function(){
-            let url = "http://api.scuplus.cn/jwc/grade";
-            let _this=this;
-            this.loadingShow=true;
-            $.ajax({
-                url: url,
-                data: {
-                    token: storage.get("token")
+            return {
+                grades: {},
+                resultShow: false,
+                helpShow: true,
+                sum: {
+                    gpa: 0,
+                    grade: 0,
+                    credit: 0,
+                    classNum: 0
                 },
-                type: 'post',
-                success: function(r) {
-                    console.log(r);
-                    if (r.status == 1) {
-                      let grade=calGrade(r.data);
-                      storage.set("grade",JSON.stringify(grade));
-                      _this.grade=grade;
-                      _this.loadingShow=false;
+                avg: {
+                    gpa: 0,
+                    grade: 0
+                },
+                loading: "获取中，请稍候",
+                loadingShow: false
+            }
+        },
+        methods: {
+            //点击选择
+            choose: function(t) {
+                let tr = t.path[1];
+                $(tr).toggleClass('choose');
+            },
+
+            //选择一学期
+            chooseTable: function(t) {
+                let table = t.path[3];
+                let i = 0;
+                $(table).find('tbody tr').each(function(index, el) {
+                    if ($(el).hasClass('choose')) {
+                        $(el).removeClass('choose');
+                        i++;
                     }
-
-                },
-                error: function(x, t, e) {
-                  console.log(x);
-                },
-                complete: function() {
-
+                });
+                if (i == 0) {
+                    $(table).find('tbody tr').each(function(index, el) {
+                        $(el).addClass('choose');
+                    });
                 }
-            });
-          }
-        },
-        computed:{
-          grades:function(){
-            let grade;
-            //获取成绩并且保存到浏览器本地储存
-            if(!storage.get("grade")){
-              getGrade(function(g){
-                grade=g
-                storage.set("grade",JSON.stringify(g));
-              });
-            }else{
-              grade=JSON.parse(storage.get("grade"));
+                console.log(table);
+            },
+
+            //选择所有必修
+            chooseRequired: function() {
+                $("tr").removeClass("choose");
+                $("tr[type='1']").addClass('choose');
+            },
+
+            //计算已选择的成绩
+            calculation: function() {
+                let sum = {
+                    gpa: 0,
+                    grade: 0,
+                    credit: 0,
+                    classNum: 0
+                };
+                let avg = {
+                    gpa: 0,
+                    grade: 0
+                }
+                $("tr[class='choose']").each(function(i, e) {
+                    let credit = parseInt($(e).children('.credit').text());
+                    sum.credit += parseInt($(e).children('.credit').text());
+                    sum.gpa += parseInt($(e).children('.gpa').text()) * credit;
+                    sum.grade += parseInt($(e).children('.grade').attr("grade")) * credit;
+                    sum.classNum++;
+                });
+                avg.gpa = (sum.gpa / sum.credit).toFixed(2);
+                avg.grade = (sum.grade / sum.credit).toFixed(2);
+                this.sum = sum;
+                this.avg = avg;
+                this.resultShow = true;
+            },
+
+            //帮助
+            help: function() {
+                this.helpShow = true;
+            },
+
+            //更新成绩
+            update: function() {
+                let url = "http://api.scuplus.cn/jwc/grade";
+                let _this = this;
+                this.loadingShow = true;
+                $.ajax({
+                    url: url,
+                    data: {
+                        token: storage.get("token")
+                    },
+                    type: 'post',
+                    success: function(r) {
+                        console.log(r);
+                        if (r.status == 1) {
+                            let grade = calGrade(r.data);
+                            storage.set("grade", JSON.stringify(grade));
+                            _this.grade = grade;
+                            _this.loadingShow = false;
+                        }
+
+                    },
+                    error: function(x, t, e) {
+                        console.log(x);
+                    },
+                    complete: function() {
+
+                    }
+                });
             }
-            console.log(grade);
-            return grade;
-          }
+        },
+        computed: {
+            grades: function() {
+                let grade;
+                //获取成绩并且保存到浏览器本地储存
+                if (!storage.get("grade")) {
+                    getGrade(function(g) {
+                        grade = g
+                        storage.set("grade", JSON.stringify(g));
+                    });
+                } else {
+                    grade = JSON.parse(storage.get("grade"));
+                }
+                console.log(grade);
+                return grade;
+            }
         }
     }
 </script>
@@ -441,20 +448,21 @@
         table thead th {
             border: none;
         }
-        .choose{
-          background:#ececec !important;
+        .choose {
+            background: #ececec !important;
         }
-        .result,.help{
-          color:#333244;
+        .result,
+        .help {
+            color: #333244;
         }
-        .help{
-          text-align: left;
+        .help {
+            text-align: left;
         }
-        .help  div{
-          background:#eee;
-          border:1px solid #ccc;
-          margin-top:5px;
-          padding:10px;
+        .help div {
+            background: #eee;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            padding: 10px;
         }
     }
 </style>
