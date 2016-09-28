@@ -68,7 +68,7 @@ const needTokens={
   exam:'考表',
   search:'搜索',
   grade:"成绩",
-  schedule:"课程表",
+  // schedule:"课程表",
   "bind-jwc":"绑定教务处",
 };
 

@@ -94,14 +94,14 @@ common.ajax=function(method,url,data,async,callback){
     });
 }
 
-//get操作
-common.get=function(url,data,async,callback){
-  this.ajax("get",url,data,async,callback);
+//get操作，默认异步
+common.get=function(url,data,callback){
+  this.ajax("get",url,data,true,callback);
 }
 
-//post操作
-common.post=function(url,data,async,callback){
-  this.ajax("post",url,data,async,callback);
+//post操作，默认异步操作
+common.post=function(url,data,callback){
+  this.ajax("post",url,data,true,callback);
 }
 
 module.exports=common;

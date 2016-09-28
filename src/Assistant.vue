@@ -1,123 +1,204 @@
 <template>
     <div id="assistant">
-    <div v-for="item in items">
-        <card :footer="{title:'查看更多',link:'/component/panel'}">
-            <div slot="header" class="weui_panel_hd panel-title">
-                <h3>软件工程
-                    <rater class="rater" :value=4 :font-size=13 disabled></rater>
-                </h3>
-            </div>
-            <div slot="content" class="card-padding">
-                <div class="assistant-badge">
-                    <span class="badge">
-                        <span style="background: #35495e;">平均分</span><span style="background: #FF9933" >80.5</span>
-                    </span>
-                    <span class="badge">
-                       <span style="background: #666666;">上课人次</span><span style="background: #99CC66;">35</span>
-                    </span>
-                    <span class="badge">
-                       <span  style="background: #35495e;">评教人次</span><span  style="background: #FF9933;">28</span>
-                    </span>
-                    <span class="badge">
-                          <span  style="background: #666666;">挂科率</span><span style="background: #99CC66;">6.5%</span>
-                    </span>
+        <scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;"  lock-x scrollbar-y use-pullup>
+            <div id="course-box">
+                <div v-for="item in items">
+                    <card :footer="{title:'查看更多',link:item.clink}">
+                        <div class="weui_panel_hd panel-title" slot="header">
+                            <h3>
+                                {{item.name}}
+                                <rater :font-size="13" :value="item.avg_star" class="rater" disabled="">
+                                </rater>
+                            </h3>
+                        </div>
+                        <div class="card-padding" slot="content">
+                            <div class="assistant-badge">
+                                <span class="badge">
+                                    <span style="background: #35495e;">
+                                        平均分
+                                    </span>
+                                    <span style="background: #FF9933">
+                                        {{item.avg_grade}}
+                                    </span>
+                                </span>
+                                <span class="badge">
+                                    <span style="background: #666666;">
+                                        上课人次
+                                    </span>
+                                    <span style="background: #99CC66;">
+                                        {{item.count_grade}}
+                                    </span>
+                                </span>
+                                <span class="badge">
+                                    <span style="background: #35495e;">
+                                        评教人次
+                                    </span>
+                                    <span style="background: #FF9933;">
+                                        {{item.count_star}}
+                                    </span>
+                                </span>
+                                <span class="badge">
+                                    <span style="background: #666666;">
+                                        挂科率
+                                    </span>
+                                    <span style="background: #99CC66;">
+                                        {{item.pass_rate? (1-item.pass_rate)*100 : "无"}}%
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="assistant-content">
+                                <flexbox>
+                                    <flexbox-item>
+                                        <p>
+                                            <span class="assistant-content-title">
+                                                周次：
+                                            </span>
+                                            {{item.allWeek}}
+                                        </p>
+                                    </flexbox-item>
+                                    <flexbox-item>
+                                        <p>
+                                            <span class="assistant-content-title">
+                                                星期：
+                                            </span>
+                                            {{item.day}}
+                                        </p>
+                                    </flexbox-item>
+                                </flexbox>
+                                <flexbox>
+                                    <flexbox-item>
+                                        <p>
+                                            <span class="assistant-content-title">
+                                                节次：
+                                            </span>
+                                            {{item.session}}
+                                        </p>
+                                    </flexbox-item>
+                                    <flexbox-item>
+                                        <p>
+                                            <span class="assistant-content-title">
+                                                校区：
+                                            </span>
+                                            {{item.campus}}
+                                        </p>
+                                    </flexbox-item>
+                                </flexbox>
+                                <p>
+                                    <span class="assistant-content-title">
+                                        学院：
+                                    </span>
+                                    {{item.college}}
+                                </p>
+                                <p>
+                                    <span class="assistant-content-title">
+                                        教师：
+                                    </span>
+                                    <x-button class="assistant-content-teacher" mini="" v-link="t.tlink" plain="" v-for="t in item.teacher">
+                                        {{t.name}}
+                                    </x-button>
+                                </p>
+                            </div>
+                        </div>
+                    </card>
                 </div>
-                <div class="assistant-content">
-                    <flexbox>
-                        <flexbox-item>
-                            <p><span class="assistant-content-title">周次：</span>1-17周</p>
-                        </flexbox-item>
-                        <flexbox-item>
-                            <p><span class="assistant-content-title">星期：</span>5</p>
-                        </flexbox-item>
-                    </flexbox>
-                    <flexbox>
-                        <flexbox-item>
-                            <p><span class="assistant-content-title">节次：</span>第一大节</p>
-                        </flexbox-item>
-                        <flexbox-item>
-                            <p><span class="assistant-content-title">校区：</span>江安</p>
-                        </flexbox-item>
-                    </flexbox>
-                    <p><span class="assistant-content-title">学院：</span>电子信息学院</p>
-                    <p>
-                        <span class="assistant-content-title">教师：</span>
-                        <x-button mini plain class="assistant-content-teacher">啦啦</x-button>
-                        <x-button mini plain class="assistant-content-teacher">啦啦</x-button>
-                        <x-button mini plain class="assistant-content-teacher">啦啦</x-button>
-                        <x-button mini plain class="assistant-content-teacher">啦啦</x-button>
-                    </p>
-                </div>
-
-                
             </div>
-        </card>
-    </div>
-        
+        </scroller>
     </div>
 </template>
-
 <script>
     import Card from 'vux/src/components/card'
     import Rater from 'vux/src/components/rater'
     import XButton from 'vux/src/components/x-button'
     import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
+    import Scroller from 'vux/src/components/scroller'
+    import common from "./js/common"
+
+    function course(data){
+        let str,spstr;
+        for (let i = 0; i < data.length; i++) {
+            //周次转换
+            str=data[i].allWeek;
+            spstr = str.split(",");
+            data[i].allWeek=spstr[0]+"-"+spstr[spstr.length-1]+"周";
+            //课程详情链接
+            data[i].clink="/assistant?cid="+data[i].id;
+            //课程教师链接
+            for(let j=0;j<data[i].teacher.length;j++){
+              data[i].teacher[j].tlink="/assistant?cid="+data[i].id+"&tid="+data[i].teacher[j].id;
+            }
+        }
+        return data;
+    }
     export default {
       components: {
-        Card,Rater,XButton,Flexbox,FlexboxItem
+        Card,Rater,XButton,Flexbox,FlexboxItem,Scroller
       },
+      methods: {
+         load (uuid) {
+            let courseUrl="http://api.scuplus.cn/jwc/course?page="+this.page;
+            let _this=this;
+            common.post(courseUrl,null,function(e,r){
+               if(e!=null){
+                _this.$vux.toast.show({
+                    text:e,
+                    type:"warn"
+                });
+               }else{
+                    let d=course(r.data.data);
+                    console.log(d);
+                    for(let i=0;i<d.length;i++){
+                      _this.items.push(d[i]);
+                    }
+                    _this.$broadcast('pullup:reset',uuid);
+                    _this.page+=1;
+
+               }
+                console.log(r);
+            });
+         }
+              
+        },
       data (){
         return {
-            items:[
-                {
-                    name:"软件工程",
-                    avg_grade:95.6,
-                    avg_satr:4.5,
-                    count_grade:35,
-                    count_star:20,
-                    fail_rate:6.5
-                },
-                {
-                    name:"软件工程",
-                    avg_grade:95.6,
-                    avg_satr:4.5,
-                    count_grade:35,
-                    count_star:20,
-                    fail_rate:6.5
-                }
-                ,
-                {
-                    name:"软件工程",
-                    avg_grade:95.6,
-                    avg_satr:4.5,
-                    count_grade:35,
-                    count_star:20,
-                    fail_rate:6.5
-                }
-                ,
-                {
-                    name:"软件工程",
-                    avg_grade:95.6,
-                    avg_satr:4.5,
-                    count_grade:35,
-                    count_star:20,
-                    fail_rate:6.5
-                }
-                ,
-                {
-                    name:"软件工程",
-                    avg_grade:95.6,
-                    avg_satr:4.5,
-                    count_grade:35,
-                    count_star:20,
-                    fail_rate:6.5
-                }
-            ]
+            items:[{}],
+            page:1,
+            n2:10,
+            pullupConfig: {
+                content: '上拉加载更多',
+                downContent: '松开进行加载',
+                upContent: '上拉加载更多',
+                loadingContent: '加载中...'
+            }
         }
-      }    }
+      },
+      //数据初始化
+      ready(){
+        let courseUrl="http://api.scuplus.cn/jwc/course";
+        let _this=this;
+        common.post(courseUrl,null,function(e,r){
+           if(e!=null){
+            _this.$vux.toast.show({
+                text:e,
+                type:"warn"
+            });
+           }else{
+                _this.$set("items",course(r.data.data));
+                console.log(r.data);
+           }
+            console.log(r);
+        });
+      },
+      computed: {
+    }  
+  }
 </script>
-
 <style>
+    #assistant{
+/*      height: -moz-calc(100% - 40px);
+      height: -webkit-calc(100% - 90px);*/
+      height: 100%;
+      overflow: hidden;
+    }
     #assistant .panel-title .rater{
         float:right;
     }

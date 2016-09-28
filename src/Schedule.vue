@@ -105,12 +105,12 @@ export default {
     },
   data () {
     return {
-      helpShow:true,
+      helpShow:false,
       icalShow:false,
       icalLink:"",
-      loadingShow:false,
+      loadingShow:true,
       loading:"请稍后",
-      schedule_html:{}
+      schedule_html:""
     }
   },
   methods:{
@@ -145,15 +145,28 @@ export default {
     
     }
   },
+  //数据初始化
+  ready (){
+    let url = "http://api.scuplus.cn/jwc/schedule";
+      let data;
+      let _this=this;
+      common.get(url,null,true,function(e,r){
+        _this.$set("loadingShow",false);
+        if(e!=null){
+          _this.$vux.toast.show({
+            text:e,
+            type:"warn"
+          });
+          console.log(e);
+        }else{
+          data=r.data;
+          _this.$set("schedule_html",schedule(data));
+          _this.$set("helpShow",true);
+        }
+      });
+  },
   computed:{
-    schedule_html (){
-      let schedule_data;
-      schedule_data=getSchedule();
-      if(!schedule_data){
-        return null;
-      }
-      return schedule(schedule_data);
-    }
+
   }
 }
 
