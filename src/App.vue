@@ -109,16 +109,24 @@ export default {
     title () {
         let path=(this.$route.path.split("/"))[1];
 
-        if(path in needTokens){
-          let token=storage.get("token");
-          common.isLogin(token,true);
-        }
-        
-
         if(path in titles){
           return titles[path];
         }
         return titles.default;
+    }
+  },
+  ready(){
+    let path=(this.$route.path.split("/"))[1];
+    let _this=this;
+    if(path in needTokens){
+      common.isLogin(function(e,r) {
+        if(e!=null){
+          _this.$vux.toast.show({
+            text:e,
+            type:"warn"
+          });
+        }
+      });
     }
   }
 }

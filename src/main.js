@@ -5,6 +5,7 @@ import Router from 'vue-router'
 
 import Login from './Login'
 import Assistant from './Assistant'
+import AssistantDetails from './AssistantDetails'
 import Search from './Search'
 import Exam from './Exam'
 import Grade from './Grade'
@@ -23,6 +24,9 @@ const router = new Router({
 router.map({
 	'/': {
 		component: Assistant
+	},
+	'/assistant':{
+		component: AssistantDetails
 	},
 	'/login': {
 		component: Login

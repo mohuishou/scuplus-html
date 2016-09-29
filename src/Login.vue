@@ -94,7 +94,8 @@
                 }
             },
             login: function() {
-
+                let backUrl=this.$route.query.back;
+                console.log(backUrl);
                 const _this = this;
                 let loginType = 1;
                 if (!(param.phone || param.email)) {
@@ -111,7 +112,7 @@
 
                 this.btnText = "登录中请稍候...";
                 this.isDisabled = true;
-                let backUrl=location.search;
+
                 $.ajax({
                     url: url,
                     type: 'POST',

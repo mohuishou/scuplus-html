@@ -150,7 +150,7 @@ export default {
     let url = "http://api.scuplus.cn/jwc/schedule";
       let data;
       let _this=this;
-      common.get(url,null,true,function(e,r){
+      common.get(url,null,function(e,r){
         _this.$set("loadingShow",false);
         if(e!=null){
           _this.$vux.toast.show({

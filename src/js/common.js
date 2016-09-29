@@ -1,43 +1,13 @@
 // let storage=require "./storage"
 import storage from "./storage"
 let common={};
-common.isLogin=function(token,isJump) {
-	let r=false;
-	if(!token){
-		if(isJump){
-			alert("用户尚未登录！");
-        	location.href="/#!/login";
-		}
-        return false;
-	}
-	let url = "http://api.scuplus.cn/jwc/grade";
-        $.ajax({
-            url: url,
-            async:false,
-            data: {
-                token: token
-            },
-            type: 'get',
-            success: function(r) {
-                console.log(r);
-                if (r.status == 1) {
-                }
-                r=true;
-                // callback(null);
+common.config={
+  domain:"http://api.scuplus.cn"
+}
 
-            },
-            error: function(x, t, e) {
-            	console.warn(x);
-            	if(x.status==401){
-            		// callback("获取成绩错误！用户token无效");
-            		if(isJump){
-            			alert("用户登录信息已失效！");
-			        	location.href="/#!/login";
-					}
-            	}
-            }
-        });
-        return r;
+common.isLogin=function(callback) {
+  let url=this.config.domain+"/login/check";
+	this.get(url,null,callback);
 }
 
 //ajax操作,默认需要登录信息
@@ -78,7 +48,7 @@ common.ajax=function(method,url,data,async,callback){
           case 401://认证失败
               msg="用户尚未登录，或登录信息已失效！";
               setTimeout(function() {
-                location.href="/#!/login?/"+backUrl;
+                location.href="/#!/login?back=/"+backUrl;
               },1500);
             break;
           case 400://一般错误
