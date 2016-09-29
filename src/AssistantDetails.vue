@@ -2,105 +2,133 @@
     <div id="assistant-details">
         <scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;"  lock-x scrollbar-y use-pullup>
             <div id="course-box">
-                <div v-for="item in items">
-                    <card :footer="{title:'查看更多',link:item.clink}">
-                        <div class="weui_panel_hd panel-title" slot="header">
-                            <h3>
-                                {{item.name}}
-                                <rater :font-size="13" :value="item.avg_star" class="rater" disabled="">
-                                </rater>
-                            </h3>
+                <card>
+                    <div class="weui_panel_hd panel-title" slot="header">
+                        <h3>
+                            {{c.name}} <span class="star-num"> / {{c.avg_star}}</span>
+                            <rater :font-size="13" :value="c.avg_star" class="rater" disabled="">
+                            </rater>
+                        </h3>
+                    </div>
+                    <div class="card-padding" slot="content">
+                        <div class="assistant-badge">
+                            <span class="badge">
+                                <span style="background: #35495e;">
+                                    平均分
+                                </span>
+                                <span style="background: #FF9933">
+                                    {{c.avg_grade}}
+                                </span>
+                            </span>
+                            <span class="badge">
+                                <span style="background: #666666;">
+                                    上课人次
+                                </span>
+                                <span style="background: #99CC66;">
+                                    {{c.count_grade}}
+                                </span>
+                            </span>
+                            <span class="badge">
+                                <span style="background: #35495e;">
+                                    评教人次
+                                </span>
+                                <span style="background: #FF9933;">
+                                    {{c.count_star}}
+                                </span>
+                            </span>
+                            <span class="badge">
+                                <span style="background: #666666;">
+                                    挂科率
+                                </span>
+                                <span style="background: #99CC66;">
+                                    {{c.pass_rate? (1-c.pass_rate)*100 : "无"}}%
+                                </span>
+                            </span>
                         </div>
-                        <div class="card-padding" slot="content">
-                            <div class="assistant-badge">
-                                <span class="badge">
-                                    <span style="background: #35495e;">
-                                        平均分
-                                    </span>
-                                    <span style="background: #FF9933">
-                                        {{item.avg_grade}}
-                                    </span>
+                        <div class="assistant-content">
+                            <flexbox>
+                                <flexbox-item>
+                                    <p>
+                                        <span class="assistant-content-title">
+                                            周次：
+                                        </span>
+                                        {{c.allWeek}}
+                                    </p>
+                                </flexbox-item>
+                                <flexbox-item>
+                                    <p>
+                                        <span class="assistant-content-title">
+                                            星期：
+                                        </span>
+                                        {{c.day}}
+                                    </p>
+                                </flexbox-item>
+                            </flexbox>
+                            <flexbox>
+                                <flexbox-item>
+                                    <p>
+                                        <span class="assistant-content-title">
+                                            节次：
+                                        </span>
+                                        {{c.session}}
+                                    </p>
+                                </flexbox-item>
+                                <flexbox-item>
+                                    <p>
+                                        <span class="assistant-content-title">
+                                            校区：
+                                        </span>
+                                        {{c.campus}}
+                                    </p>
+                                </flexbox-item>
+                            </flexbox>
+                            <p>
+                                <span class="assistant-content-title">
+                                    学院：
                                 </span>
-                                <span class="badge">
-                                    <span style="background: #666666;">
-                                        上课人次
-                                    </span>
-                                    <span style="background: #99CC66;">
-                                        {{item.count_grade}}
-                                    </span>
+                                {{c.college}}
+                            </p>
+                            <p>
+                                <span class="assistant-content-title">
+                                    教师：
                                 </span>
-                                <span class="badge">
-                                    <span style="background: #35495e;">
-                                        评教人次
-                                    </span>
-                                    <span style="background: #FF9933;">
-                                        {{item.count_star}}
-                                    </span>
-                                </span>
-                                <span class="badge">
-                                    <span style="background: #666666;">
-                                        挂科率
-                                    </span>
-                                    <span style="background: #99CC66;">
-                                        {{item.pass_rate? (1-item.pass_rate)*100 : "无"}}%
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="assistant-content">
-                                <flexbox>
-                                    <flexbox-item>
-                                        <p>
-                                            <span class="assistant-content-title">
-                                                周次：
-                                            </span>
-                                            {{item.allWeek}}
-                                        </p>
-                                    </flexbox-item>
-                                    <flexbox-item>
-                                        <p>
-                                            <span class="assistant-content-title">
-                                                星期：
-                                            </span>
-                                            {{item.day}}
-                                        </p>
-                                    </flexbox-item>
-                                </flexbox>
-                                <flexbox>
-                                    <flexbox-item>
-                                        <p>
-                                            <span class="assistant-content-title">
-                                                节次：
-                                            </span>
-                                            {{item.session}}
-                                        </p>
-                                    </flexbox-item>
-                                    <flexbox-item>
-                                        <p>
-                                            <span class="assistant-content-title">
-                                                校区：
-                                            </span>
-                                            {{item.campus}}
-                                        </p>
-                                    </flexbox-item>
-                                </flexbox>
-                                <p>
-                                    <span class="assistant-content-title">
-                                        学院：
-                                    </span>
-                                    {{item.college}}
-                                </p>
-                                <p>
-                                    <span class="assistant-content-title">
-                                        教师：
-                                    </span>
-                                    <x-button class="assistant-content-teacher" mini="" v-link="t.tlink" plain="" v-for="t in item.teacher">
-                                        {{t.name}}
-                                    </x-button>
-                                </p>
-                            </div>
+                                <x-button class="assistant-content-teacher" mini="" v-link="t.tlink" plain="" v-for="t in c.teacher">
+                                    {{t.name}}
+                                </x-button>
+                            </p>
                         </div>
-                    </card>
-                </div>
+                    </div>
+                </card>
+                <ul class="discuss_list">
+                      <li class="discuss_item" v-for="comment in list">
+
+                        <!-- <div class="discuss_opr">
+                          <span class="media_tool_meta tips_global meta_praise" :class="{'praised': comment.has_praised}">
+                            <i class="icon_praise_gray" @click="praise(comment)"></i>
+                            <span class="praise_num">{{comment.like_num}}</span>
+                          </span>
+                        </div> -->
+
+                        <div class="user_info">
+                          <strong class="nickname">{{comment.name}} <span class="star-num"> / {{comment.star}}</span>
+                          <div class="discuss_rater">
+                              <rater :font-size="13" :value="comment.star"  disabled=""></rater>
+                          </div>
+                          
+                          </strong>
+                        </div>
+
+                        <div class="discuss_message">
+                          <span class="discuss_status">{{comment.status}}</span>
+                          <div class="discuss_message_content">{{comment.content}}</div>
+                        </div>
+                        <p class="discuss_extra_info">{{comment.time}} by 匿名用户
+
+                          <a v-if="comment.is_from_me" class="discuss_del js_del" href="javascript:;" data-my-id="<#=my_id#>" data-content-id="<#=content_id#>">删除</a>
+                        </p>
+
+                      </li>
+                    </ul>
             </div>
         </scroller>
     </div>
@@ -115,26 +143,76 @@
 
     function course(data){
         let str,spstr;
-        for (let i = 0; i < data.length; i++) {
             //周次转换
-            str=data[i].allWeek;
+            str=data.allWeek;
             spstr = str.split(",");
-            data[i].allWeek=spstr[0]+"-"+spstr[spstr.length-1]+"周";
+            data.allWeek=spstr[0]+"-"+spstr[spstr.length-1]+"周";
             //课程详情链接
-            data[i].clink="/assistant?cid="+data[i].id;
-            //课程教师链接
-            for(let j=0;j<data[i].teacher.length;j++){
-              data[i].teacher[j].tlink="/assistant?cid="+data[i].id+"&tid="+data[i].teacher[j].id;
+            data.clink="/assistant?cid="+data.id;
+            if(!(data.teacher instanceof Array)){
+                data.teacher=[data.teacher];
             }
-        }
+            //课程教师链接
+            for(let j=0;j<data.teacher.length;j++){
+              data.teacher[j].tlink="/assistant?cid="+data.id+"&tid="+data.teacher[j].id;
+            }
         return data;
     }
+
+    function evaluate(datas){
+        let lists=[];
+        for(let i=0;i<datas.length;i++){
+            let data=datas[i];
+            let list=lists[i]={};
+            for(let j=0;j<data.evaluate_info.length;j++){
+                let e=data.evaluate_info[j];
+                list.name="To "+data.teacher.name+"老师";
+                list.time=common.getLocalTime(e.updated_at);
+                list.content=e.message;
+                list.star=e.stars;
+            }
+        
+        }
+        console.log(lists)
+        return lists;
+    }
+
+    
     export default {
       components: {
         Card,Rater,XButton,Flexbox,FlexboxItem,Scroller
       },
       methods: {
          load (uuid) {
+
+            let _this=this;
+
+            //评教详情获取
+            common.get("/jwc/evaluate/all?page="+this.page,this.params,function(e,r){
+               if(e!=null){
+                _this.$vux.toast.show({
+                    text:e,
+                    type:"warn"
+                });
+               }else{
+                    console.log();
+                    if(r.data.current_page>=r.data.total){
+                        _this.$vux.toast.show({
+                            text:"没有数据了"
+                        });
+                        _this.$broadcast('pullup:done',uuid);
+                        return ;
+                    }
+                    let d=evaluate(r.data.data);
+                    for(let i=0;i<d.length;i++){
+                      _this.list.push(d[i]);
+                    }
+                    _this.$broadcast('pullup:reset',uuid);
+                    _this.page+=1;
+               }
+                console.log(r);
+            });
+
             
          }
               
@@ -142,6 +220,8 @@
       data (){
         return {
             items:[{}],
+            c:{},
+            list:"",
             page:1,
             params:'',            
             pullupConfig: {
@@ -155,57 +235,66 @@
       //数据初始化
       ready(){
         this.params=this.$route.query;
-        let courseUrl="http://api.scuplus.cn/jwc/evaluate";
         let _this=this;
-        console.log(this.params);
-        common.get(courseUrl,this.params,function(e,r){
+
+        //单课程详情获取
+        common.post("/jwc/course/one",this.params,function(e,r){
+            if(e!=null){
+             _this.$vux.toast.show({
+                 text:e,
+                 type:"warn"
+             });
+            }else{
+                 _this.$set("c",course(r.data));
+            }
+        });
+
+        //评教详情获取
+        common.get("/jwc/evaluate/all?page="+this.page,this.params,function(e,r){
            if(e!=null){
             _this.$vux.toast.show({
                 text:e,
                 type:"warn"
             });
            }else{
-                _this.$set("items",r.data.data);
+                _this.$set("list",evaluate(r.data.data));
                 console.log(r.data);
            }
             console.log(r);
         });
-      },
-      computed: {
-    }  
+      }
   }
 </script>
 <style>
-    #assistant{
-/*      height: -moz-calc(100% - 40px);
-      height: -webkit-calc(100% - 90px);*/
+    #assistant-details{
       height: 100%;
       overflow: hidden;
     }
-    #assistant .panel-title .rater{
+    #assistant-details .panel-title .rater{
         float:right;
     }
-    #assistant .card-padding{
+    #assistant-details .card-padding{
         padding:10px 15px;
     }
-    #assistant .badge{
+    #assistant-details .badge{
         display: inline-block;
     }
-    #assistant .badge span{
+    #assistant-details .badge span{
         font-size: 13px;
         padding:3px;
         color: #eee;
     }
-    #assistant .assistant-content{
+    #assistant-details .assistant-content{
         margin-top: 10px;
         font-size: 14px;
         color: #888888;
     }
-    #assistant .assistant-content p{
+    #assistant-details .assistant-content p{
         margin-top: 4px;
         margin-bottom: 4px;
     }
     .assistant-content-teacher{
         font-size: 12px !important;
     }
+
 </style>

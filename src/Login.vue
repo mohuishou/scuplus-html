@@ -94,8 +94,17 @@
                 }
             },
             login: function() {
-                let backUrl=this.$route.query.back;
-                console.log(backUrl);
+                //提取来源地址
+                let reg=`/#!/.+`;
+                let path=this.$route.path;
+                let backUrl=path.match(reg);
+                if(backUrl!=null){
+                    backUrl=backUrl[0];
+                }else{
+                    backUrl="/#!/"
+                }
+
+                
                 const _this = this;
                 let loginType = 1;
                 if (!(param.phone || param.email)) {

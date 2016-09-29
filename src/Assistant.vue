@@ -6,7 +6,7 @@
                     <card :footer="{title:'查看更多',link:item.clink}">
                         <div class="weui_panel_hd panel-title" slot="header">
                             <h3>
-                                {{item.name}}
+                                {{item.name}}<span class="star-num"> / {{item.avg_star}}</span>
                                 <rater :font-size="13" :value="item.avg_star" class="rater" disabled="">
                                 </rater>
                             </h3>
@@ -135,7 +135,7 @@
       },
       methods: {
          load (uuid) {
-            let courseUrl="http://api.scuplus.cn/jwc/course?page="+this.page;
+            let courseUrl="/jwc/course?page="+this.page;
             let _this=this;
             common.post(courseUrl,null,function(e,r){
                if(e!=null){
@@ -173,7 +173,7 @@
       },
       //数据初始化
       ready(){
-        let courseUrl="http://api.scuplus.cn/jwc/course";
+        let courseUrl="/jwc/course";
         let _this=this;
         common.post(courseUrl,null,function(e,r){
            if(e!=null){

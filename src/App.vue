@@ -134,6 +134,7 @@ export default {
 
 <style>
 @import '~vux/dist/vux.css';
+@import './assets/css/discuss.css';
 #tabbar{
         
 }
