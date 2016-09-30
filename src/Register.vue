@@ -24,6 +24,10 @@
 
     </group>
     <x-button :text="btnText" @click="register" :disabled="isDisabled"  plain></x-button>
+    <div class="attention">
+        <a href="/#!/login" class="left">已有账号？立即登录！</a>
+        <a href="/#!/forgot" class="right">忘记密码？</a>
+    </div>
   </div>
   <toast :time="1500" :show.sync="toastShow" type="warn">{{ toast }}</toast>
 
@@ -199,11 +203,5 @@ export default {
   .register-input{
     margin-bottom: 10px;
   }
-  .forgot{
-    display:block;
-    font-size:14px;
-    margin-top:5px;
-    margin-bottom:5px;
-    text-align:right;
-  }
+  
 </style>

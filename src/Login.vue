@@ -6,7 +6,11 @@
       <x-input title="密码" :value.sync="password" type="password"  :show-clear=true placeholder="请输入密码"></x-input>
     </group>
     <x-button :text="btnText" :disabled="isDisabled" @click="login" plain></x-button>
-    <a class="forgot">忘记密码？</a>
+    <div class="attention">
+        <a href="/#!/register" class="left">没有账号？立即注册！</a>
+        <a href="/#!/forgot" class="right">忘记密码？</a>
+    </div>
+    
   </div>
 <toast :time="1500" :show.sync="toastShow" :type="toastType">{{ toast }}</toast>
 
@@ -19,6 +23,7 @@
     import Toast from 'vux/src/components/toast'
     import md5 from "md5"
     import storage from "./js/storage"
+    import {update_title} from './vuex/actions'
     let param = {};
 
     /**
@@ -60,6 +65,11 @@
             XButton,
             Toast
         },
+        vuex: {
+            actions:{
+                update_title
+            }
+       },
         data() {
             return {
                 btnText: "登录",
@@ -154,7 +164,11 @@
                 });
 
             }
+        },
+        ready(){
+            this.update_title("登录");
         }
+
     }
 </script>
 <style>
@@ -166,11 +180,19 @@
         margin-bottom: 10px;
     }
     
-    .forgot {
-        display: block;
+    .attention{
         font-size: 14px;
         margin-top: 5px;
         margin-bottom: 5px;
-        text-align: right;
     }
+    .attention a{
+        color: #333244;
+    }
+    .left{
+        float: left;
+    }
+    .right{
+        float: right;
+    }
+    
 </style>

@@ -360,7 +360,7 @@
 				params:{},
 				items:[{}],
 				teacherItems:[{}],
-				page:1,
+				page:2,
 				pullupConfig: {
 				    content: '上拉加载更多',
 				    downContent: '松开进行加载',
@@ -374,7 +374,7 @@
 		methods: {
 			search: function() {
 				const _this = this;
-				this.page=1;
+				this.page=2;
 				this.isTeacher=false;
 				this.isResult=true;
 				let url="/jwc/course";
@@ -407,9 +407,6 @@
 				});
 			},
 			load (uuid) {
-						if(this.page==1){
-							this.page=2;
-						}
             let url="/jwc/course?page="+this.page;
             if(this.searchType==2){
 							url="/jwc/teacher?page="+this.page;

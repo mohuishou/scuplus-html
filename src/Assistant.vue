@@ -112,6 +112,7 @@
     import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
     import Scroller from 'vux/src/components/scroller'
     import common from "./js/common"
+    import {update_title} from './vuex/actions'
 
     function course(data){
         let str,spstr;
@@ -132,6 +133,11 @@
     export default {
       components: {
         Card,Rater,XButton,Flexbox,FlexboxItem,Scroller
+      },
+      vuex:{
+        actions:{
+            update_title
+        }
       },
       methods: {
          load (uuid) {
@@ -161,7 +167,7 @@
       data (){
         return {
             items:[{}],
-            page:1,
+            page:2,
             pullupConfig: {
                 content: '上拉加载更多',
                 downContent: '松开进行加载',
@@ -172,6 +178,7 @@
       },
       //数据初始化
       ready(){
+        this.update_title("scuplus");
         let courseUrl="/jwc/course";
         let _this=this;
         common.post(courseUrl,null,function(e,r){
@@ -184,9 +191,7 @@
                 _this.$set("items",course(r.data.data));
            }
         });
-      },
-      computed: {
-    }  
+      }
   }
 </script>
 <style>

@@ -131,6 +131,7 @@
     import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
     import Scroller from 'vux/src/components/scroller'
     import common from "./js/common"
+    import {update_title} from './vuex/actions'
 
     function course(data){
         let str,spstr;
@@ -173,6 +174,11 @@
       components: {
         Card,Rater,XButton,Flexbox,FlexboxItem,Scroller
       },
+      vuex:{
+        actions:{
+            update_title
+        }
+      },
       methods: {
          load (uuid) {
 
@@ -204,8 +210,7 @@
             });
 
             
-         }
-              
+         } 
         },
       data (){
         return {
@@ -235,7 +240,16 @@
                  type:"warn"
              });
             }else{
-                 _this.$set("c",course(r.data));
+                let d=course(r.data);
+                let t=d.name;
+                if(d.name.length>6){
+                    t=d.name.substring(0,4);
+                }
+                if(d.teacher.length==1){
+                    t=t+"-"+d.teacher[0].name;
+                }
+                _this.update_title(t);
+                _this.$set("c",d);
             }
         });
 

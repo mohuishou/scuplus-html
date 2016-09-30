@@ -4,12 +4,12 @@
 
     <!-- header -->
     <div class="header" slot="header">
-      <x-header :left-options="test"  :title="title"></x-header>
+      <x-header :left-options="test"  :title.sync="title"></x-header>
     </div>
 
 
     <!-- router -->
-    <router-view ></router-view>
+    <router-view></router-view>
 
     <!-- 底部 -->
       <tabbar v-if="tabbarShow"  id="tabbar" icon-class="vux-center"  slot="bottom">
@@ -46,7 +46,8 @@ import ViewBox from 'vux/src/components/view-box'
 import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
 import common from "./js/common"
 import storage from "./js/storage.js"
-
+import store from './vuex/store'
+import {title} from './vuex/getters'
 /**
  * 标题
  * @type {Object}
@@ -88,13 +89,19 @@ export default {
     TabbarItem,
     ViewBox
   },
+  store: store,
+  vuex: {
+     getters: {
+       title
+     }
+   },
   data (){
     return {
       test:{
         showBack:false,
         tabbarShow:true
       },
-      title:'scuplus'
+      // title:'scuplus'
     }
   },
   computed: {
@@ -106,14 +113,19 @@ export default {
           return true;
         }
     },
-    title () {
-        let path=(this.$route.path.split("/"))[1];
+    // title () {
+    //   // let t=storage.get("title");
+    //   // if(!t){
+    //   //   t="scuplus";
+    //   // }
+    //   // return t;
+    //     let path=(this.$route.path.split("/"))[1];
 
-        if(path in titles){
-          return titles[path];
-        }
-        return titles.default;
-    }
+    //     if(path in titles){
+    //       return titles[path];
+    //     }
+    //     return titles.default;
+    // }
   },
   ready(){
     console.log('test');

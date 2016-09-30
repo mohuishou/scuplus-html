@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 const state = {
   isLoading: false,
-  direction: 'forward'
+  direction: 'forward',
+  title:"scuplus"
 }
 export default new Vuex.Store({
   state,
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     UPDATE_DIRECTION (state, direction) {
       state.direction = direction
+    },
+    UPDATE_TITLE(state,t){
+      state.title=t;
     }
   }
 })
