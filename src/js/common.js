@@ -8,14 +8,17 @@ common.config={
 common.isLogin=function(callback) {
   //首先判断token是否存在
   let token=storage.get("token");
+  let backUrl=location.hash;
   if(!token){
     callback("用户尚未登录");
+    setTimeout(function() {
+      location.href="/#!/login?back=/"+backUrl;
+    },1500);
     return false;
   }
 
   //token存在时再到服务器取值判断
-  let url=this.config.domain+"/login/check";
-	this.get(url,null,callback);
+	this.get("/login/check",null,callback);
 }
 
 //ajax操作,默认需要登录信息

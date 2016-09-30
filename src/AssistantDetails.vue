@@ -101,20 +101,11 @@
                 </card>
                 <ul class="discuss_list">
                       <li class="discuss_item" v-for="comment in list">
-
-                        <!-- <div class="discuss_opr">
-                          <span class="media_tool_meta tips_global meta_praise" :class="{'praised': comment.has_praised}">
-                            <i class="icon_praise_gray" @click="praise(comment)"></i>
-                            <span class="praise_num">{{comment.like_num}}</span>
-                          </span>
-                        </div> -->
-
                         <div class="user_info">
                           <strong class="nickname">{{comment.name}} <span class="star-num"> / {{comment.star}}</span>
                           <div class="discuss_rater">
                               <rater :font-size="13" :value="comment.star"  disabled=""></rater>
                           </div>
-                          
                           </strong>
                         </div>
 
@@ -266,35 +257,9 @@
   }
 </script>
 <style>
-    #assistant-details{
-      height: 100%;
-      overflow: hidden;
-    }
-    #assistant-details .panel-title .rater{
-        float:right;
-    }
-    #assistant-details .card-padding{
-        padding:10px 15px;
-    }
-    #assistant-details .badge{
-        display: inline-block;
-    }
-    #assistant-details .badge span{
-        font-size: 13px;
-        padding:3px;
-        color: #eee;
-    }
-    #assistant-details .assistant-content{
-        margin-top: 10px;
-        font-size: 14px;
-        color: #888888;
-    }
-    #assistant-details .assistant-content p{
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
-    .assistant-content-teacher{
-        font-size: 12px !important;
-    }
+#assistant-details{
+  height: 100%;
+  overflow: hidden;
+}
 
 </style>

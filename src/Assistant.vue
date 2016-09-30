@@ -194,35 +194,8 @@
 </script>
 <style>
     #assistant{
-/*      height: -moz-calc(100% - 40px);
-      height: -webkit-calc(100% - 90px);*/
       height: 100%;
       overflow: hidden;
     }
-    #assistant .panel-title .rater{
-        float:right;
-    }
-    #assistant .card-padding{
-        padding:10px 15px;
-    }
-    #assistant .badge{
-        display: inline-block;
-    }
-    #assistant .badge span{
-        font-size: 13px;
-        padding:3px;
-        color: #eee;
-    }
-    #assistant .assistant-content{
-        margin-top: 10px;
-        font-size: 14px;
-        color: #888888;
-    }
-    #assistant .assistant-content p{
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
-    .assistant-content-teacher{
-        font-size: 12px !important;
-    }
+   
 </style>

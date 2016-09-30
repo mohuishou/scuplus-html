@@ -66,8 +66,8 @@ const titles={
  */
 const needTokens={
   exam:'考表',
-  search:'搜索',
-  grade:"成绩",
+  // search:'搜索',
+  // grade:"成绩",
   // schedule:"课程表",
   "bind-jwc":"绑定教务处",
 };
@@ -116,6 +116,7 @@ export default {
     }
   },
   ready(){
+    console.log('test');
     let path=(this.$route.path.split("/"))[1];
     let _this=this;
     if(path in needTokens){
@@ -135,6 +136,7 @@ export default {
 <style>
 @import '~vux/dist/vux.css';
 @import './assets/css/discuss.css';
+@import './assets/css/assistant.css';
 #tabbar{
         
 }

@@ -1,0 +1,27 @@
+
+ .panel-title .rater{
+    float:right;
+}
+ .card-padding{
+    padding:10px 15px;
+}
+ .badge{
+    display: inline-block;
+}
+ .badge span{
+    font-size: 13px;
+    padding:3px;
+    color: #eee;
+}
+ .assistant-content{
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888888;
+}
+ .assistant-content p{
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.assistant-content-teacher{
+    font-size: 12px !important;
+}
