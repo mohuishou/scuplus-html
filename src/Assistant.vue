@@ -162,7 +162,6 @@
         return {
             items:[{}],
             page:1,
-            n2:10,
             pullupConfig: {
                 content: '上拉加载更多',
                 downContent: '松开进行加载',
@@ -183,9 +182,7 @@
             });
            }else{
                 _this.$set("items",course(r.data.data));
-                console.log(r.data);
            }
-            console.log(r);
         });
       },
       computed: {

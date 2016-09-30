@@ -186,8 +186,7 @@
                     type:"warn"
                 });
                }else{
-                    console.log();
-                    if(r.data.current_page>=r.data.total){
+                    if(r.data.current_page>=r.data.last_page){
                         _this.$vux.toast.show({
                             text:"没有数据了"
                         });

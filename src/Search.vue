@@ -11,7 +11,7 @@
 			<x-input title="教　师"  :value.sync="params.name" :show-clear=true placeholder="请输入教师姓名"></x-input>
 			<selector placeholder="请选择学院" title="学院" :value.sync="params.college" :options="list" ></selector>
 			<div class="weui_cell">
-				<x-button class="search-btn" :text="btnText" :disabled="isDisabled" @click="login" plain></x-button>
+				<x-button class="search-btn" :text="btnText" :disabled="isDisabled" @click="search" plain></x-button>
 			</div>
 
 			<div class="tips">
@@ -35,7 +35,7 @@
 			
 			
 			<div class="weui_cell">
-				<x-button class="search-btn" :text="btnText" :disabled="isDisabled" @click="login" plain></x-button>
+				<x-button class="search-btn" :text="btnText" :disabled="isDisabled" @click="search" plain></x-button>
 			</div>
 
 			<div class="tips">
@@ -151,6 +151,12 @@
 		</scroller>
 	</div>
 
+	<div v-show="isResult" id="search-switch">
+		<div class="icon" @click="searchSwitch">
+			<img src="./assets/img/switch.png">
+		</div>
+	</div>
+
 </template>
 
 <script>
@@ -159,10 +165,10 @@
 	import XButton from 'vux/src/components/x-button'
 	import Selector from 'vux/src/components/selector'
 	import { Tab,TabItem } from 'vux/src/components/tab'
-	 import Card from 'vux/src/components/card'
-    import Rater from 'vux/src/components/rater'
-    import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
-    import Scroller from 'vux/src/components/scroller'
+	import Card from 'vux/src/components/card'
+  import Rater from 'vux/src/components/rater'
+  import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
+  import Scroller from 'vux/src/components/scroller'
 	import common from "./js/common"
 	import college from "./js/college"
 	
@@ -239,6 +245,23 @@
 			value:"挂科率(顺序)"
 		}
 	];
+
+	function course(data){
+	    let str,spstr;
+	    for (let i = 0; i < data.length; i++) {
+	        //周次转换
+	        str=data[i].allWeek;
+	        spstr = str.split(",");
+	        data[i].allWeek=spstr[0]+"-"+spstr[spstr.length-1]+"周";
+	        //课程详情链接
+	        data[i].clink="/assistant?cid="+data[i].id;
+	        //课程教师链接
+	        for(let j=0;j<data[i].teacher.length;j++){
+	          data[i].teacher[j].tlink="/assistant?cid="+data[i].id+"&tid="+data[i].teacher[j].id;
+	        }
+	    }
+	    return data;
+	}
 	export default {
 		components: {
 			XInput,
@@ -258,20 +281,34 @@
 				sessionList:sessionList,
 				orderList:orderList,
 				list:college.main,
-				params:{}
+				params:{},
+				items:[{}],
+				page:1,
+				pullupConfig: {
+				    content: '上拉加载更多',
+				    downContent: '松开进行加载',
+				    upContent: '上拉加载更多',
+				    loadingContent: '加载中...'
+				},
+				isResult:false
 			}
 		},
 		methods: {
-			login: function() {
+			search: function() {
 				const _this = this;
-				console.log(this.params);
+				this.page=1;
+				this.isResult=true;
 				let url="/jwc/course";
-				// this.btnText = "搜索中请稍候...";
-				// this.isDisabled=true;
+				this.btnText = "搜索中请稍候...";
+				this.isDisabled=true;
 				if(this.searchType==2){
 					url="/jwc/teacher";
 				}
 				common.post(url,this.params,function(e,r){
+					setTimeout(function() {
+						_this.btnText = "搜索";
+						_this.isDisabled=false;
+					},700);
 					if(e!=null){
 			      _this.$vux.toast.show({
 			        text:e,
@@ -279,13 +316,49 @@
 			      });
 			      return ;
 			    }
-
-
+			    _this.items=course(r.data.data);
+			    _this.searchResult=true;
 				});
-				
-			}
+			},
+			load (uuid) {
+            let url="/jwc/course?page="+this.page;
+            if(this.searchType==2){
+							url="/jwc/teacher?page="+this.page;
+						}
+            let _this=this;
+            common.post(url,this.params,function(e,r){
+            	if(r.data.current_page>=r.data.last_page){
+            	    _this.$vux.toast.show({
+            	        text:"没有数据了",
+            	        type:"success"
+            	    });
+            	    _this.$broadcast('pullup:done',uuid);
+            	    return ;
+            	}
+               if(e!=null){
+                _this.$vux.toast.show({
+                    text:e,
+                    type:"warn"
+                });
+               }else{
+                    let d=course(r.data.data);
+                    console.log(d);
+                    for(let i=0;i<d.length;i++){
+                      _this.items.push(d[i]);
+                    }
+                    _this.$broadcast('pullup:reset',uuid);
+                    _this.page+=1;
+
+               }
+                console.log(r);
+            });
+      },
+      searchSwitch:function(){
+      	this.searchResult=!this.searchResult;
+      }
 		},
 		ready(){
+			//登录检测
 			let _this=this;
 			common.isLogin(function(e,r) {
 			 	if(e!=null){
@@ -299,6 +372,27 @@
 	}
 </script>
 <style>
+	#search-switch{
+		position: absolute;
+		right:10px;
+		bottom:70px;
+	}
+	.icon{
+		width: 50px;
+		height: 50px;
+		border-radius:25px;
+		background:rgba(53,73,94,0.7);
+		text-align: center;
+	}
+	.icon img{
+		margin-top:12.5px; 
+		text-align: center;
+		width:25px;
+	}
+	#search-result{
+	  height: 100%;
+	  overflow: hidden;
+	}
 	.search-input> div {
 		margin-top: 0px;
 		padding-top: 5px;
