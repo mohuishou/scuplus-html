@@ -48,7 +48,7 @@
 	<div id="search-result" v-if="searchResult">
 		<scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;"  lock-x scrollbar-y use-pullup>
 		    <div id="course-box">
-		        <div v-for="item in items">
+		        <div v-if="!isTeacher" v-for="item in items">
 		            <card :footer="{title:'查看更多',link:item.clink}">
 		                <div class="weui_panel_hd panel-title" slot="header">
 		                    <h3>
@@ -146,6 +146,70 @@
 		                    </div>
 		                </div>
 		            </card>
+		        </div>
+
+		        <div v-if="isTeacher" v-for="teacher in teacherItems">
+		        	<card>
+		        	    <div class="weui_panel_hd panel-title" slot="header">
+		        	        <h3>
+		        	            {{teacher.name}}<span class="star-num"> / {{teacher.avg_star}}</span>
+		        	            <rater :font-size="13" :value="teacher.avg_star" class="rater" disabled="">
+		        	            </rater>
+		        	        </h3>
+		        	    </div>
+		        	    <div class="card-padding" slot="content">
+		        	        <div class="assistant-badge">
+		        	            <span class="badge">
+		        	                <span style="background: #35495e;">
+		        	                    平均分
+		        	                </span>
+		        	                <span style="background: #FF9933">
+		        	                    {{teacher.avg_grade}}
+		        	                </span>
+		        	            </span>
+		        	            <span class="badge">
+		        	                <span style="background: #666666;">
+		        	                    上课人次
+		        	                </span>
+		        	                <span style="background: #99CC66;">
+		        	                    {{teacher.count_grade}}
+		        	                </span>
+		        	            </span>
+		        	            <span class="badge">
+		        	                <span style="background: #35495e;">
+		        	                    评教人次
+		        	                </span>
+		        	                <span style="background: #FF9933;">
+		        	                    {{teacher.count_star}}
+		        	                </span>
+		        	            </span>
+		        	            <span class="badge">
+		        	                <span style="background: #666666;">
+		        	                    挂科率
+		        	                </span>
+		        	                <span style="background: #99CC66;">
+		        	                    {{teacher.pass_rate? (1-teacher.pass_rate)*100 : "无"}}%
+		        	                </span>
+		        	            </span>
+		        	        </div>
+		        	        <div class="assistant-content">
+		        	            <p>
+		        	                <span class="assistant-content-title">
+		        	                    学院：
+		        	                </span>
+		        	                {{teacher.college}}
+		        	            </p>
+		        	            <p>
+		        	                <span class="assistant-content-title">
+		        	                   课程：
+		        	                </span>
+		        	                <x-button class="assistant-content-teacher" mini="" v-link="c.link" plain="" v-for="c in teacher.course">
+		        	                    {{c.name}}
+		        	                </x-button>
+		        	            </p>
+		        	        </div>
+		        	    </div>
+		        	</card>
 		        </div>
 		    </div>
 		</scroller>
@@ -262,6 +326,18 @@
 	    }
 	    return data;
 	}
+
+	function teacher(data){
+		let str,spstr;
+	    for (let i = 0; i < data.length; i++) {
+	        //课程详情链接
+	        //课程教师链接
+	        for(let j=0;j<data[i].course.length;j++){
+	          data[i].course[j].link="/assistant?tid="+data[i].id+"&cid="+data[i].course[j].id;
+	        }
+	    }
+	    return data;
+	}
 	export default {
 		components: {
 			XInput,
@@ -283,6 +359,7 @@
 				list:college.main,
 				params:{},
 				items:[{}],
+				teacherItems:[{}],
 				page:1,
 				pullupConfig: {
 				    content: '上拉加载更多',
@@ -290,13 +367,15 @@
 				    upContent: '上拉加载更多',
 				    loadingContent: '加载中...'
 				},
-				isResult:false
+				isResult:false,
+				isTeacher:false
 			}
 		},
 		methods: {
 			search: function() {
 				const _this = this;
 				this.page=1;
+				this.isTeacher=false;
 				this.isResult=true;
 				let url="/jwc/course";
 				this.btnText = "搜索中请稍候...";
@@ -316,11 +395,21 @@
 			      });
 			      return ;
 			    }
-			    _this.items=course(r.data.data);
+			    let d=r.data.data;
+			    if (!d[0].allWeek) {
+			    	_this.teacherItems=teacher(d);
+			    	_this.isTeacher=true;
+			    }else{
+			    	_this.items=course(d);
+			    }
+			    
 			    _this.searchResult=true;
 				});
 			},
 			load (uuid) {
+						if(this.page==1){
+							this.page=2;
+						}
             let url="/jwc/course?page="+this.page;
             if(this.searchType==2){
 							url="/jwc/teacher?page="+this.page;
@@ -341,11 +430,21 @@
                     type:"warn"
                 });
                }else{
-                    let d=course(r.data.data);
-                    console.log(d);
-                    for(let i=0;i<d.length;i++){
-                      _this.items.push(d[i]);
-                    }
+               			let d=r.data.data;
+               			if (!d[0].allWeek) {
+               				d=teacher(d);
+               				_this.isTeacher=true;
+               				for(let i=0;i<d.length;i++){
+               				  _this.teacherItems.push(d[i]);
+               				}
+
+               			}else{
+               				d=course(d);
+               				for(let i=0;i<d.length;i++){
+               				  _this.items.push(d[i]);
+               				}
+               			}
+                    
                     _this.$broadcast('pullup:reset',uuid);
                     _this.page+=1;
 
