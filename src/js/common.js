@@ -5,6 +5,7 @@ common.config={
   domain:"http://api.scuplus.cn"
 }
 
+//登录检测，有跳转，一半用于需要登录后的操作
 common.isLogin=function(callback) {
   //首先判断token是否存在
   let token=storage.get("token");
@@ -21,9 +22,39 @@ common.isLogin=function(callback) {
 	this.get("/login/check",null,callback);
 }
 
+//登录检测，没有跳转，一般用于登录注册时
+common.isLoginNoJump=function(callback){
+  //首先判断token是否存在
+  let token=storage.get("token");
+  if(!token){
+    callback("用户尚未登录");
+    return false;
+  }
+  let url=this.config.domain+"/login/check";
+  $.ajax({
+      url: url,
+      type:"get",
+      success: function(r) {
+        callback(null,"用户已登录！");
+      },
+      error: function(x, t, e) {
+        let r=x.response;
+        let msg="";
+        switch(x.status) {     
+          case 401://认证失败
+              msg="用户尚未登录，或登录信息已失效！";
+            break;
+          default:
+            msg="错误！"
+            break;
+        }
+        callback(msg);
+      }
+    });
+}
+
 //ajax操作,默认需要登录信息
 common.ajax=function(method,url,data,async,callback){
-
   //data数据初始化
   let d=data;
   if(!d){
@@ -31,7 +62,7 @@ common.ajax=function(method,url,data,async,callback){
   }
   if(typeof d !='object'){
     console.warn("参数类型错误，请输入一个数组数据！");
-    callback("餐宿类型错误请输入一个数组数据！");
+    callback("参数类型错误请输入一个数组数据！");
   }
 
   //url拼接
@@ -87,6 +118,7 @@ common.ajax=function(method,url,data,async,callback){
     });
 }
 
+//时间戳转换
 common.getLocalTime=function(nS) {  
   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' '); 
 }

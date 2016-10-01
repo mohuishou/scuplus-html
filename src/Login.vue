@@ -167,6 +167,7 @@
             }
         },
         ready(){
+            //登录检测
             this.update_title("登录");
         }
 
