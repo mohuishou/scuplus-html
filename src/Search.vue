@@ -1,4 +1,6 @@
 <template>
+
+	<!-- 搜索界面 -->
 	<div id="search" v-show="!searchResult">
 
 		<tab>
@@ -44,7 +46,9 @@
 			</div>
 		</group>
 	</div>
+	<!-- 搜索界面end -->
 
+	<!-- 搜索结果 -->
 	<div id="search-result" v-if="searchResult">
 		<scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;"  lock-x scrollbar-y use-pullup>
 		    <div id="course-box">
@@ -214,12 +218,15 @@
 		    </div>
 		</scroller>
 	</div>
+	<!-- 搜索结果 end -->
 
+	<!-- 切换按钮 -->
 	<div v-show="isResult" id="search-switch">
 		<div class="icon" @click="searchSwitch">
 			<img src="./assets/img/switch.png">
 		</div>
 	</div>
+	<!-- 切换按钮end -->
 
 </template>
 
@@ -235,8 +242,9 @@
   import Scroller from 'vux/src/components/scroller'
 	import common from "./js/common"
 	import college from "./js/college"
+	import {update_title} from './vuex/actions'
 	
-
+	//常量，selector
 	const dayList=[
 		{
 			key:"1",
@@ -310,6 +318,8 @@
 		}
 	];
 
+
+	//课程数据初始化
 	function course(data){
 	    let str,spstr;
 	    for (let i = 0; i < data.length; i++) {
@@ -327,6 +337,7 @@
 	    return data;
 	}
 
+	//教师数据初始化
 	function teacher(data){
 		let str,spstr;
 	    for (let i = 0; i < data.length; i++) {
@@ -346,6 +357,11 @@
 			Tab,
 			TabItem,
 			Selector,Card,Rater,Flexbox,FlexboxItem,Scroller
+		},
+		vuex:{
+		  actions:{
+		      update_title
+		  }
 		},
 		data () {
 			return {
@@ -404,6 +420,7 @@
 			    }
 			    
 			    _this.searchResult=true;
+			    _this.update_title("搜索结果");
 				});
 			},
 			load (uuid) {
@@ -441,7 +458,6 @@
                				  _this.items.push(d[i]);
                				}
                			}
-                    
                     _this.$broadcast('pullup:reset',uuid);
                     _this.page+=1;
 
@@ -451,11 +467,17 @@
       },
       searchSwitch:function(){
       	this.searchResult=!this.searchResult;
+      	if(!this.searchResult){
+      		this.update_title("搜索");
+      	}else{
+      		this.update_title("搜索结果");
+      	}
       }
 		},
 		ready(){
 			//登录检测
 			let _this=this;
+			this.update_title("搜索");
 			common.isLogin(function(e,r) {
 			 	if(e!=null){
 			      _this.$vux.toast.show({
@@ -463,7 +485,7 @@
 			        type:"warn"
 			      });
 			    }
-			  });
+			});
 		}
 	}
 </script>

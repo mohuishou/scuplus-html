@@ -101,7 +101,6 @@ export default {
         showBack:false,
         tabbarShow:true
       },
-      // title:'scuplus'
     }
   },
   computed: {
@@ -112,20 +111,7 @@ export default {
         }else{
           return true;
         }
-    },
-    // title () {
-    //   // let t=storage.get("title");
-    //   // if(!t){
-    //   //   t="scuplus";
-    //   // }
-    //   // return t;
-    //     let path=(this.$route.path.split("/"))[1];
-
-    //     if(path in titles){
-    //       return titles[path];
-    //     }
-    //     return titles.default;
-    // }
+    }
   },
   ready(){
     console.log('test');

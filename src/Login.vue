@@ -82,6 +82,7 @@
             }
         },
         methods: {
+            //用户检测
             userCheck: function() {
                 //清空
                 param.email = "";
