@@ -34,6 +34,7 @@ common.isLoginNoJump=function(callback){
   $.ajax({
       url: url,
       type:"get",
+      data:{token:token},
       success: function(r) {
         callback(null,"用户已登录！");
       },

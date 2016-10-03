@@ -48,6 +48,39 @@ import common from "./js/common"
 import storage from "./js/storage.js"
 import store from './vuex/store'
 import {title} from './vuex/getters'
+
+/**
+ * token检测，刷新
+ */
+function tokenCheck(){
+  console.log("********token检测开启********");
+  let token=storage.get("token");
+  let token_start=storage.get("token_start");
+  if(!token||!token_start){
+    console.log("********token不存在********");
+    return;
+  }
+  let now=new Date().getTime();
+  if(((now-token_start)/(1000*60*60))>1.5){
+    console.log("********token即将过期，刷新中********");
+    common.get("/token/refresh",null,function(e,r){
+      if(e!=null){
+          console.log(e);
+          return;
+        }
+        storage.set("token",r.data.token);
+        //设置token产生时间
+        storage.set("token_start",new Date().getTime());
+        console.log("********token更新成功********");
+      });
+    }else{
+      console.log("********token尚未失效********");
+    }
+  }
+
+
+
+
 /**
  * 标题
  * @type {Object}
@@ -60,17 +93,6 @@ const titles={
   grade:"成绩",
   schedule:"课程表",
   "bind-jwc":"绑定教务处"
-};
-
-/**
- * 需要登陆之后的token才能使用的
- */
-const needTokens={
-  exam:'考表',
-  // search:'搜索',
-  // grade:"成绩",
-  // schedule:"课程表",
-  "bind-jwc":"绑定教务处",
 };
 
 /**
@@ -105,6 +127,7 @@ export default {
   },
   computed: {
     tabbarShow(){
+      tokenCheck();
       let path=(this.$route.path.split("/"))[1];
       if(path in needTabbar){
           return false;
@@ -114,19 +137,19 @@ export default {
     }
   },
   ready(){
-    console.log('test');
-    let path=(this.$route.path.split("/"))[1];
-    let _this=this;
-    if(path in needTokens){
-      common.isLogin(function(e,r) {
-        if(e!=null){
-          _this.$vux.toast.show({
-            text:e,
-            type:"warn"
-          });
-        }
-      });
-    }
+    // console.log('test');
+    // let path=(this.$route.path.split("/"))[1];
+    // let _this=this;
+    // if(path in needTokens){
+    //   common.isLogin(function(e,r) {
+    //     if(e!=null){
+    //       _this.$vux.toast.show({
+    //         text:e,
+    //         type:"warn"
+    //       });
+    //     }
+    //   });
+    // }
   }
 }
 </script>

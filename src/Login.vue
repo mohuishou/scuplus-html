@@ -12,7 +12,6 @@
     </div>
     
   </div>
-<toast :time="1500" :show.sync="toastShow" :type="toastType">{{ toast }}</toast>
 
 </template>
 
@@ -20,65 +19,30 @@
     import XInput from 'vux/src/components/x-input'
     import Group from 'vux/src/components/group'
     import XButton from 'vux/src/components/x-button'
-    import Toast from 'vux/src/components/toast'
     import md5 from "md5"
     import storage from "./js/storage"
+    import common from "./js/common"
     import {update_title} from './vuex/actions'
     let param = {};
-
-    /**
-     * 刷新token
-     * @return {[type]} [description]
-     */
-    function refreshToken() {
-        let token = storage.get("token");
-        if (!token) {
-            console.warn("没有获取到token，请重新登录！");
-            return false;
-        }
-        let url = "http://api.scuplus.cn/token/refresh";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: {
-                token: token
-            },
-            success: function(r) {
-                console.log(r);
-                if (r.status == 1) {
-                    storage.set("token",r.data.token);
-                    console.log("token获取成功！");
-                }
-            },
-            error: function(x, t, e) {
-                console.warn(x);
-            }
-        });
-
-    }
-
 
     export default {
         components: {
             XInput,
             Group,
             XButton,
-            Toast
         },
         vuex: {
             actions:{
                 update_title
             }
-       },
+        },
         data() {
             return {
                 btnText: "登录",
                 isDisabled: false,
                 user: "",
-                toast: 'toast',
-                toastShow: false,
                 password: "",
-                toastType: "warn"
+                backUrl:""
             }
         },
         methods: {
@@ -98,29 +62,22 @@
                     if (is_phone) {
                         param.phone = user;
                     } else {
-                        this.toastType = "warn";
-                        this.toast = "请输入正确的手机号或邮箱地址！";
-                        this.toastShow = true;
+                        _this.$vux.toast.show({
+                            type:"warn",
+                            text:"请输入正确的手机号或邮箱地址！"
+                        });
                     }
                 }
             },
             login: function() {
-                //提取来源地址
-                let reg=`/#!/.+`;
-                let path=this.$route.path;
-                let backUrl=path.match(reg);
-                if(backUrl!=null){
-                    backUrl=backUrl[0];
-                }else{
-                    backUrl="/#!/"
-                }
-
-                
+                let backUrl=this.backUrl;
                 const _this = this;
                 let loginType = 1;
                 if (!(param.phone || param.email)) {
-                    this.toast = "请输入正确的手机号或邮箱地址！";
-                    this.toastShow = true;
+                    _this.$vux.toast.show({
+                        type:"warn",
+                        text:"请输入正确的手机号或邮箱地址！"
+                    });
                     return false;
                 }
                 if (param.phone) {
@@ -133,42 +90,60 @@
                 this.btnText = "登录中请稍候...";
                 this.isDisabled = true;
 
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: param,
-                    success: function(r) {
-                        console.log(r);
-                        if (r.status == 1) {
-                            _this.toastType = "success";
-                            storage.set("token",r.data.token);
-                            setTimeout(function() {
-                                location.href = backUrl;
-                            },1500);
-
-                            setInterval(refreshToken, 59*1000*60*2); //不到两小时刷新一次
-                        }
-                        _this.toast = r.msg;
-                        _this.toastShow = true;
-                    },
-                    error: function(x, t, e) {
-                        _this.toast = "服务器错误！";
-                        if (x.status == 422) {
-                            _this.toast = "参数错误！";
-                        }
-                        _this.toastShow = true;
-                    },
-                    complete: function() {
-                        _this.isDisabled = false;
-                        _this.btnText = "登录";
+                common.post("/login/"+ loginType,param,function(e,r){
+                    _this.isDisabled = false;
+                    _this.btnText = "登录";
+                    if(e!=null){
+                        _this.$vux.toast.show({
+                            type:"warn",
+                            text:e
+                        });
+                        return;
+                    }
+                    if(r.status==1){
+                        storage.set("token",r.data.token);
+                        //设置token产生时间
+                        storage.set("token_start",new Date().getTime());
+                        setTimeout(function() {
+                            location.href = backUrl;
+                        },1500);
+                        _this.$vux.toast.show({
+                            type:"success",
+                            text:"登录成功！"
+                        });
                     }
                 });
-
             }
         },
         ready(){
-            //登录检测
+            //设置标题
             this.update_title("登录");
+
+            let _this=this;
+
+            //提取来源地址
+            let reg=`/#!/.+`;
+            let path=this.$route.path;
+            let backUrl=path.match(reg);
+            if(backUrl!=null){
+                backUrl=backUrl[0];
+            }else{
+                backUrl="/#!/"
+            }
+            this.backUrl=backUrl;
+
+            //登录检测，若已登录跳转回源地址
+            common.isLoginNoJump(function(e,r){
+                if(e==null){
+                    _this.$vux.toast.show({
+                        "type":"success",
+                        text:r
+                    });
+                    setTimeout(function() {
+                      location.href=backUrl;
+                    },1500);
+                }
+            });
         }
 
     }
