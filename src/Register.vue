@@ -40,7 +40,7 @@ import XButton from 'vux/src/components/x-button'
 import Toast from 'vux/src/components/toast'
 import Countdown from 'vux/src/components/countdown'
 import { Tab,TabItem } from 'vux/src/components/tab'
-
+import {update_title} from './vuex/actions'
 let param={};
 
 export default {
@@ -50,6 +50,11 @@ export default {
     XButton,
     Tab,
     TabItem,Toast,Countdown
+  },
+  vuex: {
+      actions:{
+          update_title
+      }
   },
   data (){
     return {
@@ -192,6 +197,37 @@ export default {
           }
         });
     }
+  },
+  ready(){
+    //设置标题
+    this.update_title("注册");
+
+    let _this=this;
+
+    //提取来源地址
+    let reg=`/#!/.+`;
+    let path=this.$route.path;
+    let backUrl=path.match(reg);
+    if(backUrl!=null){
+        backUrl=backUrl[0];
+    }else{
+        backUrl="/#!/"
+    }
+    this.backUrl=backUrl;
+
+    //登录检测，若已登录跳转回源地址
+    common.isLoginNoJump(function(e,r){
+        if(e==null){
+            _this.$vux.toast.show({
+                "type":"success",
+                text:r
+            });
+            setTimeout(function() {
+              location.href=backUrl;
+            },1500);
+        }
+    });
+    
   }
 }
 </script>

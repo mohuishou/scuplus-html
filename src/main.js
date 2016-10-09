@@ -13,6 +13,9 @@ import Schedule from './Schedule'
 import Register from './Register'
 import BindJwc from './BindJwc'
 import User from './User'
+import Forgot from './Forgot'
+
+
 import ToastPlugin from 'vux/src/plugins/toast'
 Vue.use(Router);
 Vue.use(ToastPlugin)
@@ -48,6 +51,9 @@ router.map({
 	},
 	'/bind-jwc':{
 		component:BindJwc
+	},
+	'forgot':{
+		component:Forgot
 	},
 	'/user':{
 		component:User

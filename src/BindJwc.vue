@@ -15,12 +15,17 @@
 import XInput from 'vux/src/components/x-input'
 import Group from 'vux/src/components/group'
 import XButton from 'vux/src/components/x-button'
-
+import {update_title} from './vuex/actions'
 export default {
   components: {
     XInput,
     Group,
     XButton
+  },
+  vuex: {
+      actions:{
+          update_title
+      }
   },
   data (){
     return {
@@ -34,6 +39,9 @@ export default {
        this.btnText="绑定中请稍候...";
       //  this.isDisabled=true;
     }
+  },
+  ready(){
+    this.update_title("绑定教务处");
   }
 }
 </script>
