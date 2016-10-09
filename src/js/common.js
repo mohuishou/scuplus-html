@@ -84,7 +84,7 @@ common.ajax=function(method,url,data,async,callback){
           }
       },
       error: function(x, t, e) {
-        let r=x.response;
+        let r=JSON.parse(x.response);
         let msg="";
         switch(x.status) {
           case 422://参数错误
