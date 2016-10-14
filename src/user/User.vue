@@ -41,6 +41,7 @@
     <group title="个人设置">
       <cell title="手机绑定" value="已绑定" link="/component/radio"></cell>
       <cell title="邮箱绑定" value="尚未绑定" link="/component/radio"></cell>
+      <cell title="教务处绑定" value="已绑定" link="/component/radio"></cell>
     </group>
     <group>
       <x-button type="warn">退出登录</x-button>

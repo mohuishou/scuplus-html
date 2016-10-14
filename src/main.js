@@ -3,17 +3,20 @@ import Vue from 'vue'
 import App from './App'
 import Router from 'vue-router'
 
-import Login from './Login'
-import Assistant from './Assistant'
-import AssistantDetails from './AssistantDetails'
-import Search from './Search'
-import Exam from './Exam'
-import Grade from './Grade'
-import Schedule from './Schedule'
-import Register from './Register'
-import BindJwc from './BindJwc'
-import User from './User'
-import Forgot from './Forgot'
+
+import Assistant from './jwc/Assistant'
+import AssistantDetails from './jwc/AssistantDetails'
+import Search from './jwc/Search'
+import Exam from './jwc/Exam'
+import Grade from './jwc/Grade'
+import Schedule from './jwc/Schedule'
+
+//用户相关
+import Login from './user/Login'
+import Register from './user/Register'
+import BindJwc from './user/BindJwc'
+import User from './user/User'
+import Forgot from './user/Forgot'
 
 
 import ToastPlugin from 'vux/src/plugins/toast'
