@@ -17,6 +17,7 @@ import Register from './user/Register'
 import BindJwc from './user/BindJwc'
 import User from './user/User'
 import Forgot from './user/Forgot'
+import Bind from './user/Bind'
 
 
 import ToastPlugin from 'vux/src/plugins/toast'
@@ -60,6 +61,9 @@ router.map({
 	},
 	'/user':{
 		component:User
+	},
+	'/bind':{
+		component:Bind
 	}
 });
 
