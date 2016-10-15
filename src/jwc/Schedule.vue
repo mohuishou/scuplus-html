@@ -3,30 +3,30 @@
     {{{ schedule_html }}}
 
 
-    
+
     <!-- 底部 -->
     <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
-  
+
       <!--use http link-->
       <tabbar-item @click="icalExport" >
-        <img slot="icon" src="assets/img/cal.png">
+        <img slot="icon" src="../assets/img/cal.png">
         <span slot="label">导出</span>
       </tabbar-item>
 
       <!--use vue-router link-->
       <tabbar-item @click="help">
-        <img slot="icon" src="assets/img/help.png">
+        <img slot="icon" src="../assets/img/help.png">
         <span slot="label">帮助</span>
       </tabbar-item>
 
       <!--use v-link-->
       <tabbar-item @click="update">
-        <img slot="icon" src="assets/img/update.png">
+        <img slot="icon" src="../assets/img/update.png">
         <span slot="label">更新</span>
       </tabbar-item>
       <!--use vue-router object link-->
       <tabbar-item link="/user">
-        <img slot="icon" src="assets/img/user.png">
+        <img slot="icon" src="../assets/img/user.png">
         <span slot="label">个人中心</span>
       </tabbar-item>
     </tabbar>
@@ -64,7 +64,7 @@
   </div>
 
 
-    
+
 
 </template>
 
@@ -72,10 +72,10 @@
 
 <script>
   import { Tabbar, TabbarItem } from 'vux/src/components/tabbar'
-  import storage from "./js/storage"
+  import storage from "../js/storage"
   import Dialog from 'vux/src/components/dialog'
   import Alert from 'vux/src/components/alert'
-  import common from './js/common'
+  import common from '../js/common'
   import Loading from 'vux/src/components/loading'
   let icalurl="/jwc/schedule/ics";
   function getIcalUrl() {
@@ -92,7 +92,7 @@
         }
       });
       return data;
-      
+
   }
 
 export default {
@@ -142,7 +142,7 @@ export default {
         }
 
       });
-    
+
     }
   },
   //数据初始化
@@ -177,7 +177,7 @@ export default {
  */
 function schedule(d) {
   let html='<table class=""><thead class=""><tr><th></th><th>周一</th><th>周二</th><th>周三</th><th>周四</th><th>周五</th><th>周六</th><th>周日</th></tr></thead><tbody>';
-  
+
   //统计是否存在课程，不存在用空td填充
   let flags=[],flag=false;
   for(let y=0;y<13;y++){
@@ -205,20 +205,20 @@ function schedule(d) {
               for(let m=0;m<session.length;m++){
                 let y=session[m]-1;
                 let x=s-1;
-                flags[y][x]=true; 
+                flags[y][x]=true;
               }
               flag=true;
               html += '<td rowspan="'+session.length+'">'+course_data.name+'@'+course_data.campus+course_data.building+course_data.classroom+'</td>';
             }
           }
         }
-        
+
       }
       if(!flag){
         html += '<td></td>';
       }
     }
-    
+
     html += '</tr>';
     // $("#schedule-data").append(html);
   }
@@ -230,7 +230,7 @@ function schedule(d) {
 
 
 <style lang="less">
-  
+
   #schedule{
     background: #fff;
     padding: 10px;
@@ -278,16 +278,16 @@ function schedule(d) {
       border-bottom: none;
       font-size: 16px;
     }
-    
+
     table .title{
       border: 1px solid #ddd;
     }
   }
-  
+
 
   #schedule td{
     min-width:70px;
   }
 
-  
+
 </style>

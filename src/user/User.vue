@@ -3,7 +3,7 @@
     <card >
       <div class="weui_panel_hd panel-title" slot="header">
           <h3>
-              用户名
+              用户名<span class="small">，你好！<span>
           </h3>
       </div>
       <div slot="content" class="card-flex card-content01">
@@ -55,10 +55,10 @@ import Group from 'vux/src/components/group'
 import Card from 'vux/src/components/card'
 import Cell from 'vux/src/components/cell'
 import XButton from 'vux/src/components/x-button'
-import common from "./js/common"
+import common from "../js/common"
 import {
   update_title
-} from './vuex/actions'
+} from '../vuex/actions'
 export default {
   components: {
     Card,Cell,Group,XButton
@@ -88,8 +88,13 @@ export default {
 }
 </script>
 <style scoped lang="less">
-  @import './assets/css/1px.less';
+  @import '../assets/css/1px.less';
   #user{
+    .small{
+      font-size: 13px;
+      color: #555555;
+      font-weight: normal;
+    }
     .card-flex {
       display: flex;
     }

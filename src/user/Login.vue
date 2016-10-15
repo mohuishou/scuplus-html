@@ -10,7 +10,7 @@
         <a href="/#!/register" class="left">没有账号？立即注册！</a>
         <a href="/#!/forgot" class="right">忘记密码？</a>
     </div>
-    
+
   </div>
 
 </template>
@@ -20,9 +20,9 @@
     import Group from 'vux/src/components/group'
     import XButton from 'vux/src/components/x-button'
     import md5 from "md5"
-    import storage from "./js/storage"
-    import common from "./js/common"
-    import {update_title} from './vuex/actions'
+    import storage from "../js/storage"
+    import common from "../js/common"
+    import {update_title} from '../vuex/actions'
     let param = {};
 
     export default {
@@ -152,11 +152,11 @@
     #login {
         margin-top: 30px;
     }
-    
+
     .login-input {
         margin-bottom: 10px;
     }
-    
+
     .attention{
         font-size: 14px;
         margin-top: 5px;
@@ -171,5 +171,5 @@
     .right{
         float: right;
     }
-    
+
 </style>

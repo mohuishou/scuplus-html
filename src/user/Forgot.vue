@@ -27,11 +27,11 @@ import Group from 'vux/src/components/group'
 import XButton from 'vux/src/components/x-button'
 import Countdown from 'vux/src/components/countdown'
 import md5 from "md5"
-import storage from "./js/storage"
-import common from "./js/common"
+import storage from "../js/storage"
+import common from "../js/common"
 import {
   update_title
-} from './vuex/actions'
+} from '../vuex/actions'
 let param = {};
 
 export default {

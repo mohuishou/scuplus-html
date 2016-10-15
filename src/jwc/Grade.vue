@@ -44,30 +44,30 @@
     <tabbar  id="tabbar" icon-class="vux-center"  slot="bottom">
       <!--use v-link-->
       <tabbar-item @click="chooseRequired">
-        <img slot="icon" src="assets/img/required.png">
+        <img slot="icon" src="../assets/img/required.png">
         <span slot="label">必修</span>
       </tabbar-item>
 
       <!--use http link-->
       <tabbar-item @click="calculation">
-        <img slot="icon" src="assets/img/cal.png">
+        <img slot="icon" src="../assets/img/cal.png">
         <span slot="label">计算</span>
       </tabbar-item>
 
       <!--use vue-router link-->
       <tabbar-item @click="help">
-        <img slot="icon" src="assets/img/help.png">
+        <img slot="icon" src="../assets/img/help.png">
         <span slot="label">帮助</span>
       </tabbar-item>
 
       <!--use v-link-->
       <tabbar-item @click="update">
-        <img slot="icon" src="assets/img/update.png">
+        <img slot="icon" src="../assets/img/update.png">
         <span slot="label">更新</span>
       </tabbar-item>
       <!--use vue-router object link-->
       <tabbar-item link="/user">
-        <img slot="icon" src="assets/img/user.png">
+        <img slot="icon" src="../assets/img/user.png">
         <span slot="label">个人中心</span>
       </tabbar-item>
     </tabbar>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-    import storage from "./js/storage"
+    import storage from "../js/storage"
     import {
         Tabbar,
         TabbarItem
@@ -403,7 +403,7 @@
         background: #fff;
         padding: 10px;
     }
-    
+
     #grade {
         table {
             border: 1px solid #ccc;

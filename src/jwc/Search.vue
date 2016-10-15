@@ -32,10 +32,10 @@
     	<selector placeholder="请选上课星期" :value.sync="params.day" title="星期" :options="dayList" ></selector>
 
     	<selector placeholder="请选上课节次" :value.sync="params.session" title="节次" :options="sessionList" ></selector>
-	
+
     	<selector placeholder="请选排序方式(逆序)" :value.sync="params.order" title="排序" :options="orderList" ></selector>
-			
-			
+
+
 			<div class="weui_cell">
 				<x-button class="search-btn" :text="btnText" :disabled="isDisabled" @click="search" plain></x-button>
 			</div>
@@ -223,7 +223,7 @@
 	<!-- 切换按钮 -->
 	<div v-show="isResult" id="search-switch">
 		<div class="icon" @click="searchSwitch">
-			<img src="./assets/img/switch.png">
+			<img src="../assets/img/switch.png">
 		</div>
 	</div>
 	<!-- 切换按钮end -->
@@ -240,10 +240,10 @@
   import Rater from 'vux/src/components/rater'
   import {Flexbox, FlexboxItem} from 'vux/src/components/flexbox'
   import Scroller from 'vux/src/components/scroller'
-	import common from "./js/common"
-	import college from "./js/college"
-	import {update_title} from './vuex/actions'
-	
+	import common from "../js/common"
+	import college from "../js/college"
+	import {update_title} from '../vuex/actions'
+
 	//常量，selector
 	const dayList=[
 		{
@@ -418,7 +418,7 @@
 			    }else{
 			    	_this.items=course(d);
 			    }
-			    
+
 			    _this.searchResult=true;
 			    _this.update_title("搜索结果");
 				});
@@ -503,7 +503,7 @@
 		text-align: center;
 	}
 	.icon img{
-		margin-top:12.5px; 
+		margin-top:12.5px;
 		text-align: center;
 		width:25px;
 	}
@@ -515,7 +515,7 @@
 		margin-top: 0px;
 		padding-top: 5px;
 	}
-	
+
 	.tips {
 		padding: 10px 15px;
 		font-size: 13px;
@@ -525,7 +525,7 @@
 	.checker-popup{
 		background: #fff;
 	}
-	
+
 	.checker {
 		margin-left: 15px;
 		padding-right: 15px;
@@ -533,18 +533,18 @@
 		padding-bottom: 10px;
 		border-top: 1px solid #ececec;
 	}
-	
+
 	.checker-item {
 		display: inline-block;
 		border: 1px solid #ececec;
 		padding: 5px 15px;
 		background-color: #fff;
 	}
-	
+
 	.checker-item-selected {
 		border: 1px solid green;
 	}
-	
+
 	.order-item {
 		display: inline-block;
 		width: 90px;
@@ -558,7 +558,7 @@
 		font-size: 14px;
 		margin-top: 5px;
 	}
-	
+
 	.order-item-selected {
 		border: 1px solid green;
 	}

@@ -40,7 +40,7 @@ import XButton from 'vux/src/components/x-button'
 import Toast from 'vux/src/components/toast'
 import Countdown from 'vux/src/components/countdown'
 import { Tab,TabItem } from 'vux/src/components/tab'
-import {update_title} from './vuex/actions'
+import {update_title} from '../vuex/actions'
 let param={};
 
 export default {
@@ -133,7 +133,7 @@ export default {
     changeUsername : function (v) {
         let _this=this;
         let username=v.path[0].value;
-        $.post('http://api.scuplus.cn/user/check', { 
+        $.post('http://api.scuplus.cn/user/check', {
             'param':'username' ,
             'value':username
         }, function(r){
@@ -157,8 +157,8 @@ export default {
         }
         let _this=this;
         let phone=v.path[0].value;
-        
-        $.post('http://api.scuplus.cn/user/check', { 
+
+        $.post('http://api.scuplus.cn/user/check', {
             'param':'phone' ,
             'value':phone
         }, function(r){
@@ -182,8 +182,8 @@ export default {
         }
         let _this=this;
         let email=v.path[0].value;
-        
-        $.post('http://api.scuplus.cn/user/check', { 
+
+        $.post('http://api.scuplus.cn/user/check', {
             'param':'email' ,
             'value':email
         }, function(r){
@@ -227,7 +227,7 @@ export default {
             },1500);
         }
     });
-    
+
   }
 }
 </script>
@@ -239,5 +239,5 @@ export default {
   .register-input{
     margin-bottom: 10px;
   }
-  
+
 </style>

@@ -5,7 +5,7 @@
       <x-input title="密码" type="password" :value.sync="param.spassword"  :show-clear=true placeholder="请输入密码"></x-input>
     </group>
     <x-button :text="btnText" :disabled="isDisabled" @click="bind" plain></x-button>
-    
+
   </div>
 
 </template>
@@ -14,8 +14,8 @@
 import XInput from 'vux/src/components/x-input'
 import Group from 'vux/src/components/group'
 import XButton from 'vux/src/components/x-button'
-import common from "./js/common"
-import {update_title} from './vuex/actions'
+import common from "../js/common"
+import {update_title} from '../vuex/actions'
 export default {
   components: {
     XInput,
@@ -70,7 +70,7 @@ export default {
         }
       });
 
-      
+
     }
   },
   ready(){
