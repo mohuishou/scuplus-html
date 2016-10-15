@@ -30,18 +30,19 @@
       </div>
     </card>
     <group title="教务">
-      <cell title="成绩/绩点" value="Protected" link="/component/radio"></cell>
-      <cell title="课程表" value="Protected" link="/component/radio"></cell>
-      <cell title="考试" value="Protected" link="/component/radio"></cell>
+      <cell title="成绩/绩点" value="Protected" link="/grade"></cell>
+      <cell title="课程表" value="Protected" link="/schedule"></cell>
+      <cell title="考试" value="Protected" link="/exam"></cell>
     </group>
     <group title="图书">
       <cell title="当前借阅" value="Protected" link="/component/radio"></cell>
       <cell title="历史借阅" value="Protected" link="/component/radio"></cell>
     </group>
     <group title="个人设置">
-      <cell title="手机绑定" value="已绑定" link="/component/radio"></cell>
-      <cell title="邮箱绑定" value="尚未绑定" link="/component/radio"></cell>
-      <cell title="教务处绑定" value="已绑定" link="/component/radio"></cell>
+      <cell title="手机绑定" value="已绑定" link="/bind-phone"></cell>
+      <cell title="邮箱绑定" value="尚未绑定" link="/bind-email"></cell>
+      <cell title="教务处绑定" value="已绑定" link="/bind-jwc"></cell>
+      <cell title="密码修改" value="" link="/forgot"></cell>
     </group>
     <group>
       <x-button type="warn">退出登录</x-button>
