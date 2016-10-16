@@ -45,7 +45,7 @@
       <cell title="密码修改" value="" link="/forgot"></cell>
     </group>
     <group>
-      <x-button type="warn">退出登录</x-button>
+      <x-button @click="logout" type="warn">退出登录</x-button>
     </group>
   </div>
 
@@ -80,6 +80,9 @@ export default {
        const _this = this;
        this.btnText="绑定中请稍候...";
       //  this.isDisabled=true;
+    },
+    logout:function(){
+      
     }
   },
   ready(){

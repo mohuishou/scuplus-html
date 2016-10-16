@@ -1,6 +1,11 @@
 // let storage=require "./storage"
 import storage from "./storage"
 let common={};
+
+//引入common就自动引入storage
+common.storage=storage;
+
+//公共配置项目
 common.config={
   domain:"http://api.scuplus.cn"
 }
@@ -41,7 +46,7 @@ common.isLoginNoJump=function(callback){
       error: function(x, t, e) {
         let r=x.response;
         let msg="";
-        switch(x.status) {     
+        switch(x.status) {
           case 401://认证失败
               msg="用户尚未登录，或登录信息已失效！";
             break;
@@ -120,8 +125,8 @@ common.ajax=function(method,url,data,async,callback){
 }
 
 //时间戳转换
-common.getLocalTime=function(nS) {  
-  return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' '); 
+common.getLocalTime=function(nS) {
+  return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
 }
 //get操作，默认异步
 common.get=function(url,data,callback){

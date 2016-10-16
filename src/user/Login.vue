@@ -20,6 +20,7 @@ import XButton from 'vux/src/components/x-button'
 import md5 from "md5"
 import storage from "../js/storage"
 import common from "../js/common"
+import init from "../js/init"
 import {
   update_title
 } from '../vuex/actions'
@@ -104,9 +105,22 @@ export default {
           storage.set("token", r.data.token);
           //设置token产生时间
           storage.set("token_start", new Date().getTime());
+
+          
+          init.init(function(e){
+            if(e!=null){
+              _this.$vux.toast.show({
+                type: "error",
+                text: "信息初始化失败！"
+              });
+            }
+          });
+
+
           setTimeout(function() {
             location.href = backUrl;
           }, 1500);
+
           _this.$vux.toast.show({
             type: "success",
             text: "登录成功！"

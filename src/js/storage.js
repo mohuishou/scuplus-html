@@ -12,6 +12,10 @@ storage.set=function(k,v){
 		return;
 	}
 
+	if(typeof v=="object"){
+		v=JSON.stringify(v);
+	}
+
 	if(storage.type==2){
 		localStorage[k]=v;
 	}else if(storage.type==1){
@@ -39,4 +43,3 @@ function cookie(){
 }
 
 module.exports=storage;
-
