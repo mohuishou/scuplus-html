@@ -33,7 +33,7 @@ init.schedule=function () {
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-init.userInfo=function (callback){
+init.userInfo=function (callback,update=false){
   let user=s.get("user");
   if(!user){
     common.get("/user",null,function(e,r){
@@ -51,6 +51,5 @@ init.userInfo=function (callback){
   }else {
     callback(null,JSON.parse(user));
   }
-
 }
 module.exports=init;

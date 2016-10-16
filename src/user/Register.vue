@@ -98,7 +98,9 @@ export default {
         if(r.status==1){
           _this.toast="注册成功";
           _this.toastShow=true;
-          _this.$route.go("/binf-jwc");
+          setTimeout(function() {
+            location.href="/#!/bind-jwc";
+          },1500);
         }
 
       });

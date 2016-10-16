@@ -39,9 +39,9 @@
       <cell title="历史借阅" value="Protected" link="/component/radio"></cell>
     </group>
     <group title="个人设置">
-      <cell title="手机绑定" value="已绑定" link="/bind-phone"></cell>
-      <cell title="邮箱绑定" value="尚未绑定" link="/bind-email"></cell>
-      <cell title="教务处绑定" value="已绑定" link="/bind-jwc"></cell>
+      <cell title="手机绑定" :value="user.phone ? user.phone:'未绑定'" link="/bind"></cell>
+      <cell title="邮箱绑定" :value="user.email ? user.email:'未绑定'" link="/bind"></cell>
+      <cell title="教务处绑定" :value="user.sid ? user.sid:'未绑定'" link="/bind-jwc"></cell>
       <cell title="密码修改" value="" link="/forgot"></cell>
     </group>
     <group>
@@ -57,6 +57,7 @@ import Card from 'vux/src/components/card'
 import Cell from 'vux/src/components/cell'
 import XButton from 'vux/src/components/x-button'
 import common from "../js/common"
+import init from "../js/init"
 import {
   update_title
 } from '../vuex/actions'
@@ -72,7 +73,8 @@ export default {
   data (){
     return {
       btnText:"提交",
-      isDisabled:false
+      isDisabled:false,
+      user:{},
     }
   },
   methods :{
@@ -82,12 +84,21 @@ export default {
       //  this.isDisabled=true;
     },
     logout:function(){
-      
+
     }
   },
   ready(){
     //设置标题
     this.update_title("个人中心");
+    let _this=this;
+    //获取用户信息
+    init.userInfo(function(e,r){
+      if(e!=null){
+        console.log(e);
+        return;
+      }
+      _this.user=r;
+    });
   }
 }
 </script>
