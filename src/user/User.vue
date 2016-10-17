@@ -3,12 +3,12 @@
     <card >
       <div class="weui_panel_hd panel-title" slot="header">
           <h3>
-              用户名<span class="small">，你好！<span>
+              {{user.username}}<span class="small">，你好！<span>
           </h3>
       </div>
       <div slot="content" class="card-flex card-content01">
         <div class="vux-1px-l vux-1px-r">
-          <span>14</span>
+          <span>{{schedule}}</span>
           <br/>
           课程
         </div>
@@ -18,7 +18,7 @@
           考试
         </div>
         <div class="vux-1px-r">
-          <span>77.5/2.35</span>
+          <span>{{grade}}</span>
           <br/>
           成绩/绩点
         </div>
@@ -30,8 +30,8 @@
       </div>
     </card>
     <group title="教务">
-      <cell title="成绩/绩点" value="Protected" link="/grade"></cell>
-      <cell title="课程表" value="Protected" link="/schedule"></cell>
+      <cell title="成绩/绩点" :value="grade" link="/grade"></cell>
+      <cell title="课程表" :value="schedule" link="/schedule"></cell>
       <cell title="考试" value="Protected" link="/exam"></cell>
     </group>
     <group title="图书">
@@ -75,6 +75,8 @@ export default {
       btnText:"提交",
       isDisabled:false,
       user:{},
+      grade:"",
+      schedule:""
     }
   },
   methods :{
@@ -91,6 +93,35 @@ export default {
     //设置标题
     this.update_title("个人中心");
     let _this=this;
+
+    //获取用户课程表
+    init.schedule(function (e,r) {
+      if(e!=null){
+        console.log(e);
+        return;
+      }
+      _this.schedule=r.length;
+    });
+
+    //获取用户成绩，并计算用户总成绩
+    init.grade(function(e,r){
+      if(e!=null){
+        console.log(e);
+        return;
+      }
+      let all={
+        gpa:0,
+        grade:0
+      };
+      for (let i = 0; i < r.length; i++) {
+        all.gpa+=parseFloat(r[i].avg.all.gpa);
+        all.grade+=parseFloat(r[i].avg.all.grade);
+      }
+      console.log(all);
+      _this.grade=(all.gpa/r.length).toFixed(2)+"/"+(all.grade/r.length).toFixed(2);
+      console.log(r);
+    });
+
     //获取用户信息
     init.userInfo(function(e,r){
       if(e!=null){

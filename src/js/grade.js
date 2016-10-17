@@ -37,7 +37,7 @@ grade.cal=function(data) {
             }
             d.gradeCal = lv2grade(d.grade);
             d.gpa = grade2gpa(d.gradeCal);
-            d.credit = parseInt(d.credit);
+            d.credit = parseFloat(d.credit);
             t.push(d);
             if (d.courseType == "必修") {
                 sum.required.grade += d.gradeCal * d.credit;
@@ -80,15 +80,15 @@ function grade2gpa(grade) {
     } else if (grade >= 80 && grade <= 84) {
         gpa = 3.2;
     } else if (grade >= 75 && grade <= 79) {
-        gpa = 3.2;
-    } else if (grade >= 70 && grade <= 74) {
         gpa = 2.7;
-    } else if (grade >= 65 && grade <= 69) {
+    } else if (grade >= 70 && grade <= 74) {
         gpa = 2.2;
-    } else if (grade >= 60 && grade <= 64) {
+    } else if (grade >= 65 && grade <= 69) {
         gpa = 1.7;
-    } else if (grade < 60) {
+    } else if (grade >= 60 && grade <= 64) {
         gpa = 1;
+    } else if (grade < 60) {
+        gpa = 0;
     }
     return gpa;
 }

@@ -7,9 +7,9 @@ let s=common.storage;
 let init={};
 
 init.init=function (callback) {
-  this.userInfo(callback);
-  this.grade(callback);
-  this.schedule(callback);
+  this.userInfo(callback,true);
+  this.grade(callback,true);
+  this.schedule(callback,true);
 }
 
 /**
