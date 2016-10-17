@@ -111,14 +111,18 @@ export default {
       }
       let all={
         gpa:0,
-        grade:0
+        grade:0,
+        credit:0
       };
+
       for (let i = 0; i < r.length; i++) {
-        all.gpa+=parseFloat(r[i].avg.all.gpa);
-        all.grade+=parseFloat(r[i].avg.all.grade);
+        let credit=parseFloat(r[i].sum.all.credit);
+        all.credit+=credit;
+        all.gpa+=parseFloat(r[i].avg.all.gpa)*credit;
+        all.grade+=parseFloat(r[i].avg.all.grade)*credit;
       }
       console.log(all);
-      _this.grade=(all.gpa/r.length).toFixed(2)+"/"+(all.grade/r.length).toFixed(2);
+      _this.grade=(all.gpa/all.credit).toFixed(2)+"/"+(all.grade/all.credit).toFixed(2);
       console.log(r);
     });
 
