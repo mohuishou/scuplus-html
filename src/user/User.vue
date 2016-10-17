@@ -123,7 +123,6 @@ export default {
       }
       console.log(all);
       _this.grade=(all.gpa/all.credit).toFixed(2)+"/"+(all.grade/all.credit).toFixed(2);
-      console.log(r);
     });
 
     //获取用户信息

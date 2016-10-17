@@ -108,7 +108,6 @@
 </template>
 
 <script>
-import storage from "../js/storage"
 import {
   Tabbar,
   TabbarItem
