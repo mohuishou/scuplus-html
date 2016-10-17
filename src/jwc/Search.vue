@@ -158,48 +158,48 @@
           <div class="card-padding" slot="content">
             <div class="assistant-badge">
               <span class="badge">
-		        	                <span style="background: #35495e;">
-		        	                    平均分
-		        	                </span>
-              <span style="background: #FF9933">
-		        	                    {{teacher.avg_grade}}
-		        	                </span>
+	                <span style="background: #35495e;">
+	                    平均分
+	                </span>
+                  <span style="background: #FF9933">
+	                    {{teacher.avg_grade}}
+	                </span>
               </span>
               <span class="badge">
-		        	                <span style="background: #666666;">
-		        	                    上课人次
-		        	                </span>
-              <span style="background: #99CC66;">
-		        	                    {{teacher.count_grade}}
-		        	                </span>
+                <span style="background: #666666;">
+                    上课人次
+                </span>
+                <span style="background: #99CC66;">
+                    {{teacher.count_grade}}
+                </span>
               </span>
               <span class="badge">
-		        	                <span style="background: #35495e;">
-		        	                    评教人次
-		        	                </span>
-              <span style="background: #FF9933;">
-		        	                    {{teacher.count_star}}
-		        	                </span>
+                <span style="background: #35495e;">
+                    评教人次
+                </span>
+                <span style="background: #FF9933;">
+                    {{teacher.count_star}}
+                </span>
               </span>
               <span class="badge">
-		        	                <span style="background: #666666;">
-		        	                    挂科率
-		        	                </span>
-              <span style="background: #99CC66;">
-		        	                    {{teacher.pass_rate? (1-teacher.pass_rate)*100 : "无"}}%
-		        	                </span>
+                <span style="background: #666666;">
+                    挂科率
+                </span>
+                <span style="background: #99CC66;">
+                    {{teacher.pass_rate? (1-teacher.pass_rate)*100 : "无"}}%
+                </span>
               </span>
             </div>
             <div class="assistant-content">
               <p>
                 <span class="assistant-content-title">
-		        	                    学院：
-		        	                </span> {{teacher.college}}
+                    学院：
+                </span> {{teacher.college}}
               </p>
               <p>
                 <span class="assistant-content-title">
-		        	                   课程：
-		        	                </span>
+                   课程：
+                </span>
                 <x-button class="assistant-content-teacher" mini="" v-link="c.link" plain="" v-for="c in teacher.course">
                   {{c.name}}
                 </x-button>
@@ -322,12 +322,20 @@ function course(data) {
 function teacher(data) {
   let str, spstr;
   for (let i = 0; i < data.length; i++) {
-    //课程详情链接
+
     //课程教师链接
     for (let j = 0; j < data[i].course.length; j++) {
+      if(j>0){
+        if(data[i].course[j].courseId==data[i].course[j-1].courseId&&data[i].course[j].sessionId==data[i].course[j-1].sessionId){
+          data[i].course.splice(j,1);
+          continue;
+        }
+      }
       data[i].course[j].link = "/assistant?tid=" + data[i].id + "&cid=" + data[i].course[j].id;
     }
   }
+  console.log(data);
+
   return data;
 }
 export default {
@@ -398,7 +406,7 @@ export default {
           return;
         }
         let d = r.data.data;
-        if (!d[0].allWeek) {
+        if (!d[0].teacher) {
           _this.teacherItems = teacher(d);
           _this.isTeacher = true;
         } else {
