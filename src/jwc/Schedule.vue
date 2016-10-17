@@ -7,25 +7,27 @@
 
     <!--use http link-->
     <tabbar-item @click="icalExport">
-      <img slot="icon" src="../assets/img/cal.png">
-      <span slot="label">导出</span>
+      <span slot="label">
+        <p class="iconfont icon-export"></p>
+        导出</span>
     </tabbar-item>
 
     <!--use vue-router link-->
     <tabbar-item @click="help">
-      <img slot="icon" src="../assets/img/help.png">
-      <span slot="label">帮助</span>
+      <span slot="label">
+        <p class="iconfont icon-help"></p>
+        帮助</span>
     </tabbar-item>
 
     <!--use v-link-->
     <tabbar-item @click="update">
-      <img slot="icon" src="../assets/img/update.png">
-      <span slot="label">更新</span>
+      <span slot="label">
+        <p class="iconfont icon-refresh"></p>
+        更新</span>
     </tabbar-item>
     <!--use vue-router object link-->
     <tabbar-item link="/user">
-      <img slot="icon" src="../assets/img/user.png">
-      <span slot="label">个人中心</span>
+      <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
     </tabbar-item>
   </tabbar>
 
@@ -138,7 +140,7 @@ export default {
           _this.$vux.toast.show({
             text: "更新成功！",
           });
-          common.storage.set("schedule",r.data);
+          common.storage.set("schedule", r.data);
           _this.schedule_html = schedule(r.data);
         }
       });
@@ -151,8 +153,8 @@ export default {
     init.schedule(function(e, r) {
       if (e != null) {
         this.$vux.toast.show({
-          type:"warn",
-          text:e
+          type: "warn",
+          text: e
         });
         return;
       }

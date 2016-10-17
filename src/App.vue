@@ -14,24 +14,31 @@
     <!-- 底部 -->
       <tabbar v-if="tabbarShow"  id="tabbar" icon-class="vux-center"  slot="bottom">
       <!--use v-link-->
-      <tabbar-item selected link="/">
-        <img slot="icon" src="assets/img/class-selected.png">
-        <span slot="label">选课助手</span>
+      <tabbar-item link="/">
+        <span slot="label">
+          <p class="iconfont icon-book"></p>
+          选课助手</span>
       </tabbar-item>
       <!--use http link-->
       <tabbar-item link="/search">
-        <img slot="icon" src="assets/img/search.png">
-        <span slot="label">搜索</span>
+        <span slot="label">
+          <p class="iconfont icon-magnifier"></p>
+          搜索
+        </span>
       </tabbar-item>
       <!--use vue-router link-->
       <tabbar-item link="/evaluate">
-        <img slot="icon" src="assets/img/eva.png">
-        <span slot="label">课程评价</span>
+        <span slot="label">
+          <p class="iconfont icon-star"></p>
+          课程评价
+        </span>
       </tabbar-item>
       <!--use vue-router object link-->
       <tabbar-item link="/user">
-        <img slot="icon" src="assets/img/user.png">
-        <span slot="label">个人中心</span>
+        <span slot="label">
+          <p class="iconfont icon-user"></p>
+          个人中心
+        </span>
       </tabbar-item>
     </tabbar>
   </view-box>
@@ -158,8 +165,9 @@ export default {
 @import '~vux/dist/vux.css';
 @import './assets/css/discuss.css';
 @import './assets/css/assistant.css';
+@import './assets/css/iconfont.css';
 #tabbar{
-        
+
 }
 .weui_tab_bd {
   padding-top: 46px;
@@ -170,5 +178,8 @@ export default {
     left: 0;
     z-index: 100;
     width: 100%;
+}
+.weui_tabbar_icon{
+  display: none;
 }
 </style>
