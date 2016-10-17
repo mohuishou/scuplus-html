@@ -2,40 +2,75 @@
  * 初始化，登录之后自动获取，成绩，课程表，图书馆，个人信息并且保存在sessionstorage
  */
 const common = require('./common');
+const g = require('./grade');
 let s=common.storage;
 let init={};
 
 init.init=function (callback) {
   this.userInfo(callback);
+  this.grade(callback);
+  this.schedule(callback);
 }
 
 /**
  * 成绩获取
  * @method grade
- * @return {[type]} [description]
+ * @param  {Function} callback       [description]
+ * @param  {Boolean}  [update=false] [description]
+ * @return {[type]}                  [description]
  */
-init.grade=function () {
-
+init.grade=function (callback,update=false) {
+  let grade_data=s.get("grade");
+  let url = "/jwc/grade";
+  if(!grade_data||update){
+    common.get(url,null,function(e,r){
+      if(e!=null){
+        callback(e);
+      }else{
+        let grade_data=g.cal(r.data);
+        s.set("grade",grade_data);
+        callback(null,grade_data);
+      };
+    });
+  }else {
+    callback(null,JSON.parse(grade_data));
+  }
 };
 
 /**
- * 课程表获取
+ * 课程表信息初始化
  * @method schedule
- * @return {[type]} [description]
+ * @param  {Function} callback       [description]
+ * @param  {Boolean}  [update=false] [description]
+ * @return {[type]}                  [description]
  */
-init.schedule=function () {
-
+init.schedule=function (callback,update=false) {
+  let schedule=s.get("schedule");
+  let url = "/jwc/schedule";
+  if(!schedule||update){
+    common.get(url,null,function(e,r){
+      if(e!=null){
+        callback(e);
+      }else{
+        s.set("schedule",r.data);
+        callback(null,r.data);
+      };
+    });
+  }else {
+    callback(null,JSON.parse(schedule));
+  }
 }
 
 /**
  * 用户信息获取
  * @method userInfo
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
+ * @param  {Function} callback       [description]
+ * @param  {Boolean}  [update=false] [是否直接从服务器获取数据]
+ * @return {[type]}                  [description]
  */
 init.userInfo=function (callback,update=false){
   let user=s.get("user");
-  if(!user){
+  if(!user||update){
     common.get("/user",null,function(e,r){
       if(e!=null){
         callback(e);
