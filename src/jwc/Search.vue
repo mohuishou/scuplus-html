@@ -322,7 +322,7 @@ function course(data) {
 function teacher(data) {
   let str, spstr;
   for (let i = 0; i < data.length; i++) {
-
+    if(!data[i].course) continue;
     //课程教师链接
     for (let j = 0; j < data[i].course.length; j++) {
       if(j>0){
