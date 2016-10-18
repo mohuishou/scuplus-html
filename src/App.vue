@@ -27,7 +27,7 @@
         </span>
       </tabbar-item>
       <!--use vue-router link-->
-      <tabbar-item link="/evaluate">
+      <tabbar-item link="/evaluation">
         <span slot="label">
           <p class="iconfont icon-star"></p>
           课程评价
@@ -63,13 +63,15 @@ function tokenCheck(){
   console.log("********token检测开启********");
   let token=storage.get("token");
   let token_start=storage.get("token_start");
+  let token_refresh=common.storage.get("token_refresh");
   if(!token||!token_start){
     console.log("********token不存在********");
     return;
   }
   let now=new Date().getTime();
-  if(((now-token_start)/(1000*60*60))>1.5){
+  if(((now-token_start)/(1000*60*60))>1.5&&!token_refresh){
     console.log("********token即将过期，刷新中********");
+    common.storage.set("token_refresh",1);
     common.get("/token/refresh",null,function(e,r){
       if(e!=null){
           console.log(e);
@@ -78,10 +80,12 @@ function tokenCheck(){
         storage.set("token",r.data.token);
         //设置token产生时间
         storage.set("token_start",new Date().getTime());
+        common.storage.set("token_refresh",0);
         console.log("********token更新成功********");
       });
     }else{
       console.log("********token尚未失效********");
+      common.storage.set("token_refresh",0);
     }
   }
 

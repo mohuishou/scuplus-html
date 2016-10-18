@@ -10,6 +10,7 @@ import Search from './jwc/Search'
 import Exam from './jwc/Exam'
 import Grade from './jwc/Grade'
 import Schedule from './jwc/Schedule'
+import Evaluation from './jwc/Evaluation'
 
 //用户相关
 import Login from './user/Login'
@@ -64,6 +65,9 @@ router.map({
 	},
 	'/bind':{
 		component:Bind
+	},
+	'evaluation':{
+		component:Evaluation
 	}
 });
 
