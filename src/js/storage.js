@@ -37,6 +37,10 @@ storage.get=function(k){
 	return null;
 }
 
+storage.clear=function () {
+	sessionStorage.clear();
+	localStorage.clear();
+}
 
 function cookie(){
 

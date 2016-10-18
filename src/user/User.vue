@@ -47,6 +47,11 @@
     <group>
       <x-button @click="logout" type="warn">退出登录</x-button>
     </group>
+
+    <!-- 退出登录确认对话框 -->
+    <confirm :show.sync="logoutShow" title="退出登录"  @on-confirm="logoutConfirm" >
+      <p  style="text-align:center;">您确认要退出登录么？</p>
+    </confirm>
   </div>
 
 </template>
@@ -56,6 +61,7 @@ import Group from 'vux/src/components/group'
 import Card from 'vux/src/components/card'
 import Cell from 'vux/src/components/cell'
 import XButton from 'vux/src/components/x-button'
+import Confirm from 'vux/src/components/confirm'
 import common from "../js/common"
 import init from "../js/init"
 import {
@@ -63,7 +69,7 @@ import {
 } from '../vuex/actions'
 export default {
   components: {
-    Card,Cell,Group,XButton
+    Card,Cell,Group,XButton,Confirm
   },
   vuex: {
     actions: {
@@ -76,7 +82,8 @@ export default {
       isDisabled:false,
       user:{},
       grade:"",
-      schedule:""
+      schedule:"",
+      logoutShow:false
     }
   },
   methods :{
@@ -86,7 +93,17 @@ export default {
       //  this.isDisabled=true;
     },
     logout:function(){
-
+      this.logoutShow=true;
+    },
+    logoutConfirm:function () {
+      common.storage.clear();
+      this.$vux.toast.show({
+        text:"退出登录成功！",
+        type:"success"
+      });
+      setTimeout(function () {
+        location.href="/#!/";
+      },1500);
     }
   },
   ready(){
@@ -97,7 +114,10 @@ export default {
     //获取用户课程表
     init.schedule(function (e,r) {
       if(e!=null){
-        console.log(e);
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
         return;
       }
       _this.schedule=r.length;
@@ -106,7 +126,10 @@ export default {
     //获取用户成绩，并计算用户总成绩
     init.grade(function(e,r){
       if(e!=null){
-        console.log(e);
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
         return;
       }
       let all={
@@ -128,7 +151,10 @@ export default {
     //获取用户信息
     init.userInfo(function(e,r){
       if(e!=null){
-        console.log(e);
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
         return;
       }
       _this.user=r;

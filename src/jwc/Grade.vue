@@ -44,19 +44,16 @@
   <tabbar id="tabbar" icon-class="vux-center" slot="bottom">
     <!--use v-link-->
     <tabbar-item @click="chooseRequired">
-      <img slot="icon" src="../assets/img/required.png">
       <span slot="label"><p class="iconfont icon-pencil"></p>必修</span>
     </tabbar-item>
 
     <!--use http link-->
     <tabbar-item @click="calculation">
-      <img slot="icon" src="../assets/img/cal.png">
       <span slot="label"><p class="iconfont icon-jisuan"></p>计算</span>
     </tabbar-item>
 
     <!--use vue-router link-->
     <tabbar-item @click="help">
-      <img slot="icon" src="../assets/img/help.png">
       <span slot="label"><p class="iconfont icon-help"></p>帮助</span>
     </tabbar-item>
 
@@ -66,7 +63,6 @@
     </tabbar-item>
     <!--use vue-router object link-->
     <tabbar-item link="/user">
-      <img slot="icon" src="../assets/img/user.png">
       <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
     </tabbar-item>
   </tabbar>
