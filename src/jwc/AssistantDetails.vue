@@ -5,44 +5,44 @@
       <card>
         <div class="weui_panel_hd panel-title" slot="header">
           <h3>
-                            {{c.name}} <span class="star-num"> / {{c.avg_star}}</span>
-                            <rater :font-size="13" :value="c.avg_star" class="rater" disabled="">
-                            </rater>
-                        </h3>
+              {{c.name}} <span class="star-num"> / {{c.avg_star}}</span>
+              <rater :font-size="13" :value="c.avg_star" class="rater" disabled="">
+              </rater>
+          </h3>
         </div>
         <div class="card-padding" slot="content">
           <div class="assistant-badge">
             <span class="badge">
-                                <span style="background: #35495e;">
-                                    平均分
-                                </span>
-            <span style="background: #FF9933">
-                                    {{c.avg_grade}}
-                                </span>
+              <span style="background: #35495e;">
+                  平均分
+              </span>
+              <span style="background: #FF9933">
+                  {{c.avg_grade}}
+              </span>
             </span>
             <span class="badge">
-                                <span style="background: #666666;">
-                                    上课人次
-                                </span>
-            <span style="background: #99CC66;">
-                                    {{c.count_grade}}
-                                </span>
+              <span style="background: #666666;">
+                  上课人次
+              </span>
+              <span style="background: #99CC66;">
+                  {{c.count_grade}}
+              </span>
             </span>
             <span class="badge">
-                                <span style="background: #35495e;">
-                                    评教人次
-                                </span>
-            <span style="background: #FF9933;">
-                                    {{c.count_star}}
-                                </span>
+              <span style="background: #35495e;">
+                  评教人次
+              </span>
+              <span style="background: #FF9933;">
+                  {{c.count_star}}
+              </span>
             </span>
             <span class="badge">
-                                <span style="background: #666666;">
-                                    挂科率
-                                </span>
-            <span style="background: #99CC66;">
-                                    {{c.pass_rate? (1-c.pass_rate)*100 : "无"}}%
-                                </span>
+              <span style="background: #666666;">
+                  挂科率
+              </span>
+              <span style="background: #99CC66;">
+                  {{c.pass_rate? (1-c.pass_rate)*100 : "无"}}%
+              </span>
             </span>
           </div>
           <div class="assistant-content">
@@ -50,15 +50,15 @@
               <flexbox-item>
                 <p>
                   <span class="assistant-content-title">
-                                            周次：
-                                        </span> {{c.allWeek}}
+                      周次：
+                  </span> {{c.allWeek}}
                 </p>
               </flexbox-item>
               <flexbox-item>
                 <p>
                   <span class="assistant-content-title">
-                                            星期：
-                                        </span> {{c.day}}
+                      星期：
+                  </span> {{c.day}}
                 </p>
               </flexbox-item>
             </flexbox>
@@ -66,27 +66,27 @@
               <flexbox-item>
                 <p>
                   <span class="assistant-content-title">
-                                            节次：
-                                        </span> {{c.session}}
+                      节次：
+                  </span> {{c.session}}
                 </p>
               </flexbox-item>
               <flexbox-item>
                 <p>
                   <span class="assistant-content-title">
-                                            校区：
-                                        </span> {{c.campus}}
+                      校区：
+                  </span> {{c.campus}}
                 </p>
               </flexbox-item>
             </flexbox>
             <p>
               <span class="assistant-content-title">
-                                    学院：
-                                </span> {{c.college}}
+              学院：
+          </span> {{c.college}}
             </p>
             <p>
               <span class="assistant-content-title">
-                                    教师：
-                                </span>
+              教师：
+          </span>
               <x-button class="assistant-content-teacher" mini="" v-link="t.tlink" plain="" v-for="t in c.teacher">
                 {{t.name}}
               </x-button>
@@ -98,21 +98,18 @@
         <li class="discuss_item" v-for="comment in list">
           <div class="user_info">
             <strong class="nickname">{{comment.name}} <span class="star-num"> / {{comment.star}}</span>
-                          <div class="discuss_rater">
-                              <rater :font-size="13" :value="comment.star"  disabled=""></rater>
-                          </div>
-                          </strong>
+              <div class="discuss_rater">
+                  <rater :font-size="13" :value="comment.star"  disabled=""></rater>
+              </div>
+              </strong>
           </div>
-
           <div class="discuss_message">
             <span class="discuss_status">{{comment.status}}</span>
             <div class="discuss_message_content">{{comment.content}}</div>
           </div>
           <p class="discuss_extra_info">{{comment.time}} by 匿名用户
-
             <a v-if="comment.is_from_me" class="discuss_del js_del" href="javascript:;" data-my-id="<#=my_id#>" data-content-id="<#=content_id#>">删除</a>
           </p>
-
         </li>
       </ul>
     </div>
@@ -138,7 +135,7 @@ function course(data) {
   //周次转换
   str = data.allWeek;
   spstr = str.split(",");
-  data.allWeek = spstr[0] + "-" + spstr[spstr.length - 1] + "周";
+  data.allWeek = spstr[0] + "-" + spstr[spstr.length - 1] + "周";v.path[0]
   //课程详情链接
   data.clink = "/assistant?cid=" + data.id;
   if (!(data.teacher instanceof Array)) {
@@ -165,7 +162,6 @@ function evaluate(datas) {
     }
 
   }
-  console.log(lists)
   return lists;
 }
 
