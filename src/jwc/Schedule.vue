@@ -2,34 +2,7 @@
 <div id="schedule">
   {{{ schedule_html }}}
 
-  <!-- 底部 -->
-  <tabbar id="tabbar" icon-class="vux-center" slot="bottom">
 
-    <!--use http link-->
-    <tabbar-item @click="icalExport">
-      <span slot="label">
-        <p class="iconfont icon-export"></p>
-        导出</span>
-    </tabbar-item>
-
-    <!--use vue-router link-->
-    <tabbar-item @click="help">
-      <span slot="label">
-        <p class="iconfont icon-help"></p>
-        帮助</span>
-    </tabbar-item>
-
-    <!--use v-link-->
-    <tabbar-item @click="update">
-      <span slot="label">
-        <p class="iconfont icon-refresh"></p>
-        更新</span>
-    </tabbar-item>
-    <!--use vue-router object link-->
-    <tabbar-item link="/user">
-      <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
-    </tabbar-item>
-  </tabbar>
 
   <!--帮助-->
   <div>
@@ -64,6 +37,34 @@
 
     <loading :show="loadingShow" :text="loading"></loading>
   </div>
+    <!-- 底部 -->
+    <tabbar id="tabbar" icon-class="vux-center" slot="bottom">
+
+    <!--use http link-->
+    <tabbar-item @click="icalExport">
+      <span slot="label">
+        <p class="iconfont icon-export"></p>
+        导出</span>
+    </tabbar-item>
+
+    <!--use vue-router link-->
+    <tabbar-item @click="help">
+      <span slot="label">
+        <p class="iconfont icon-help"></p>
+        帮助</span>
+    </tabbar-item>
+
+    <!--use v-link-->
+    <tabbar-item @click="update">
+      <span slot="label">
+        <p class="iconfont icon-refresh"></p>
+        更新</span>
+    </tabbar-item>
+    <!--use vue-router object link-->
+    <tabbar-item link="/user">
+      <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
+    </tabbar-item>
+  </tabbar>
 </template>
 
 

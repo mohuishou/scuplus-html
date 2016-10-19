@@ -135,7 +135,7 @@ function course(data) {
   //周次转换
   str = data.allWeek;
   spstr = str.split(",");
-  data.allWeek = spstr[0] + "-" + spstr[spstr.length - 1] + "周";v.path[0]
+  data.allWeek = spstr[0] + "-" + spstr[spstr.length - 1] + "周";
   //课程详情链接
   data.clink = "/assistant?cid=" + data.id;
   if (!(data.teacher instanceof Array)) {

@@ -40,32 +40,7 @@
   </div>
   <br />
 
-  <!-- 底部 -->
-  <tabbar id="tabbar" icon-class="vux-center" slot="bottom">
-    <!--use v-link-->
-    <tabbar-item @click="chooseRequired">
-      <span slot="label"><p class="iconfont icon-pencil"></p>必修</span>
-    </tabbar-item>
 
-    <!--use http link-->
-    <tabbar-item @click="calculation">
-      <span slot="label"><p class="iconfont icon-jisuan"></p>计算</span>
-    </tabbar-item>
-
-    <!--use vue-router link-->
-    <tabbar-item @click="help">
-      <span slot="label"><p class="iconfont icon-help"></p>帮助</span>
-    </tabbar-item>
-
-    <!--use v-link-->
-    <tabbar-item @click="update">
-      <span slot="label"><p class="iconfont icon-refresh"></p>更新</span>
-    </tabbar-item>
-    <!--use vue-router object link-->
-    <tabbar-item link="/user">
-      <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
-    </tabbar-item>
-  </tabbar>
 
   <!--帮助-->
   <div>
@@ -100,6 +75,32 @@
   </div>
   <loading :show="loadingShow" :text="loading"></loading>
 </div>
+  <!-- 底部 -->
+  <tabbar id="tabbar" icon-class="vux-center" slot="bottom">
+    <!--use v-link-->
+    <tabbar-item @click="chooseRequired">
+      <span slot="label"><p class="iconfont icon-pencil"></p>必修</span>
+    </tabbar-item>
+
+    <!--use http link-->
+    <tabbar-item @click="calculation">
+      <span slot="label"><p class="iconfont icon-jisuan"></p>计算</span>
+    </tabbar-item>
+
+    <!--use vue-router link-->
+    <tabbar-item @click="help">
+      <span slot="label"><p class="iconfont icon-help"></p>帮助</span>
+    </tabbar-item>
+
+    <!--use v-link-->
+    <tabbar-item @click="update">
+      <span slot="label"><p class="iconfont icon-refresh"></p>更新</span>
+    </tabbar-item>
+    <!--use vue-router object link-->
+    <tabbar-item link="/user">
+      <span slot="label"><p class="iconfont icon-user"></p>个人中心</span>
+    </tabbar-item>
+  </tabbar>
 </template>
 
 <script>

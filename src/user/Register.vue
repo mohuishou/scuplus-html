@@ -41,6 +41,7 @@ import Toast from 'vux/src/components/toast'
 import Countdown from 'vux/src/components/countdown'
 import { Tab,TabItem } from 'vux/src/components/tab'
 import {update_title} from '../vuex/actions'
+import common from "../js/common"
 let param={};
 
 export default {
