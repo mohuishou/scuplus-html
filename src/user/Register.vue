@@ -17,7 +17,7 @@
       <x-input title="验证码" :value.sync="verifyCode" :show-clear=false type="number" placeholder="请输入验证码">
         <x-button slot="right"  v-show="countShow"  type="disabled">
           发送中
-          <countdown :time="120" @on-finish="verifyFinish"></countdown>
+          <countdown :time="time" @on-finish="verifyFinish"></countdown>
         </x-button>
         <x-button  @click="sendVerify" slot="right" v-show="!countShow" type="primary">发送验证码</x-button>
       </x-input>
@@ -66,7 +66,8 @@ export default {
       toastShow:false,
       countShow:false,
       password:'',
-      verifyCode:''
+      verifyCode:'',
+      time
     }
   },
   methods :{
@@ -109,6 +110,7 @@ export default {
     //验证码发送倒计时
     verifyFinish:function(){
       this.countShow=false;
+      this.time=120;
     },
     //发送验证码
     sendVerify:function(){

@@ -130,7 +130,7 @@ function scheduleItems(data){
       }
       c.teacher[j].evaluate_info=eva;
 
-      c.teacher[j].tlink="/evaluate?cid="+c.id+"&tid="+c.teacher[j].id;
+      c.teacher[j].tlink="/evaluate?cid="+c.id+"&tid="+c.teacher[j].id+"&to=To:"+c.teacher[j].name+"（"+c.name+"）";
     }
     course.push(c);
   }
@@ -168,7 +168,13 @@ export default {
     this.update_title("课程评价");
     let _this=this;
     init.schedule(function (e,r) {
-      console.log(r);
+      if(e!=null){
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
+        return;
+      }
       _this.items=scheduleItems(r);
     });
 

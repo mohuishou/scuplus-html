@@ -96,7 +96,10 @@ common.ajax=function(method,url,data,async,callback){
             if(r.error){
               msg=r.error;
             }else{
-              msg="参数错误！";
+              for (let x in r) {
+                msg+=r[x];
+              };
+              // msg="参数错误！";
             }
             break;
           case 401://认证失败

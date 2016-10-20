@@ -286,8 +286,11 @@ export default {
     let _this = this;
     //获取用户信息
     init.userInfo(function(e, r) {
-      if (e != null) {
-        console.log(e);
+      if(e!=null){
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
         return;
       }
       _this.user = r;

@@ -6,7 +6,7 @@
     <x-input title="验证码" :value.sync="verifyCode" :show-clear=false type="number" placeholder="请输入验证码">
       <x-button slot="right" v-show="countShow" type="disabled">
         发送中
-        <countdown :time="120" @on-finish="verifyFinish"></countdown>
+        <countdown :time="time" @on-finish="verifyFinish"></countdown>
       </x-button>
       <x-button @click="sendVerify" slot="right" v-show="!countShow" type="primary">发送验证码</x-button>
     </x-input>
@@ -54,7 +54,8 @@ export default {
       password: "",
       backUrl: "",
       countShow: false,
-      verifyCode: ""
+      verifyCode: "",
+      time:120
     }
   },
   methods: {
@@ -84,6 +85,7 @@ export default {
     //验证码发送倒计时
     verifyFinish: function() {
       this.countShow = false;
+      this.time=120;
     },
     //发送验证码
     sendVerify: function() {
@@ -103,16 +105,14 @@ export default {
       param.check = 1;
 
       let _this = this;
-      let url = "http://api.scuplus.cn/verify/send/" + type;
-
-      $.post(url, param, function(r) {
-        console.log(r);
-        if (r.status != 1) {
+      let url = "/verify/send/" + type;
+      common.post(url,null,function(e,r){
+        if(e!=null){
           _this.$vux.toast.show({
-            text: r.data.msg,
-            type: "warn"
+            text:e,
+            type:"warn"
           });
-
+          return;
         }
       });
       //开启倒计时
