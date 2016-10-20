@@ -17,7 +17,7 @@
                     平均分
                 </span>
               <span style="background: #FF9933">
-                    {{item.avg_grade}}
+                    {{item.avg_grade}} 分
                 </span>
               </span>
               <span class="badge">
@@ -25,22 +25,22 @@
                     上课人次
                 </span>
               <span style="background: #99CC66;">
-                    {{item.count_grade}}
+                    {{item.count_grade}} 次
                 </span>
               </span>
               <span class="badge">
                 <span style="background: #35495e;">
                     评教人次
                 </span>
-              <span style="background: #FF9933;">
-                    {{item.count_star}}
+                <span style="background: #FF9933;">
+                    {{item.count_star}} 次
                 </span>
               </span>
               <span class="badge">
                   <span style="background: #666666;">
                       挂科率
                   </span>
-              <span style="background: #99CC66;">
+                  <span style="background: #99CC66;">
                       {{item.pass_rate? (1-item.pass_rate)*100 : "无"}}%
                   </span>
               </span>
@@ -59,13 +59,13 @@
           </div>
 
           <div class="" slot="footer" >
-            <div class="weui_panel_ft" @click="showMore">
+            <div class="weui_panel_ft" @click="showMore(item.id,this)" :cid="item.id">
               <span >查看更多</span>
               <span class="none">收起</span>
             </div>
             <div class="card-padding show-more none">
-              <ul class="discuss_list" v-show="item.evaluate_count">
-                <li class="discuss_item" v-for="comment in item.teacher.evaluate_info">
+              <ul class="discuss_list">
+                <li class="discuss_item" v-for="comment in evaluateInfo[item.cid]">
                   <div class="user_info">
                     <strong class="nickname">{{comment.name}} <span class="star-num"> / {{comment.star}}</span>
                       <div class="discuss_rater">
@@ -82,7 +82,7 @@
                   </p>
                 </li>
               </ul>
-              <p v-show="!item.evaluate_count">你还没有进行过评教诶，赶快点击上方教师名，做出你的评价吧！</p>
+              <p >你还没有进行过评教诶，赶快点击上方教师名，做出你的评价吧！</p>
             </div>
           </div>
         </card>
@@ -119,17 +119,6 @@ function scheduleItems(data){
 
     c.evaluate_count=0;
     for (let j = 0; j < c.teacher.length; j++) {
-      let eva=c.teacher[j].evaluate_info;
-      c.teacher[j].evaluate_count=eva.length;
-      c.evaluate_count+=eva.length;
-      for (let k= 0; k <eva.length; k++) {
-        eva[k].name = "To " + eva[k].teacher.name + "老师";
-        eva[k].time = common.getLocalTime(eva[k].updated_at);
-        eva[k].content = eva[k].message;
-        eva[k].star = eva[k].stars;
-      }
-      c.teacher[j].evaluate_info=eva;
-
       c.teacher[j].tlink="/evaluate?cid="+c.id+"&tid="+c.teacher[j].id+"&to=To:"+c.teacher[j].name+"（"+c.name+"）";
     }
     course.push(c);
@@ -137,6 +126,25 @@ function scheduleItems(data){
   return course;
 }
 
+
+function evaluate(datas) {
+  let lists = [];
+  console.log(datas);
+  for (let i = 0; i < datas.length; i++) {
+    let data = datas[i];
+    let list = lists[i] = {};
+    lists.count= data.evaluate_info.length;
+    for (let j = 0; j < data.evaluate_info.length; j++) {
+      let e = data.evaluate_info[j];
+      list.name = "To " + data.teacher.name + "老师";
+      list.time = common.getLocalTime(e.updated_at);
+      list.content = e.message;
+      list.star = e.stars;
+    }
+
+  }
+  return lists;
+}
 
 export default {
   components: {
@@ -150,16 +158,36 @@ export default {
     }
   },
   methods: {
-    showMore:function(v){
+    showMore:function(cid,t){
+      let v=t.$event;
+      // console.log(t);
       $(v.path[0]).children("span").toggleClass("none");
       $(v.path[1]).children(".show-more").toggleClass("none");
+      let _this=this;
+      let data={};
+      data.cid=cid;
+      common.get("/jwc/evaluate",data,function (e,r) {
+        if(e!=null){
+          _this.$vux.toast.show({
+            text:e,
+            type:"warn"
+          });
+          return;
+        }
+        let ev=evaluate(r.data.data);
+        for (let i = 0; i < ev.length; i++) {
+          _this.evaluateInfo[cid].push(e[i]);
+        }
+        console.log(_this.evaluateInfo);
+      });
     }
 
   },
   data() {
     return {
       items: [{}],
-      isShowMore:true
+      isShowMore:true,
+      evaluateInfo:[]
 
     }
   },
@@ -176,6 +204,9 @@ export default {
         return;
       }
       _this.items=scheduleItems(r);
+      for (let i = 0; i < _this.items.length; i++) {
+        _this.evaluateInfo[_this.items[i].id]=[];
+      }
     });
 
   }

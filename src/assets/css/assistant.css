@@ -10,9 +10,10 @@
 }
  .badge span{
     font-size: 13px;
-    padding:3px;
+    padding:4px;
     color: #eee;
 }
+
  .assistant-content{
     margin-top: 10px;
     font-size: 14px;
