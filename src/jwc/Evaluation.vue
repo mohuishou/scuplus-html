@@ -51,7 +51,7 @@
                     教师：
                 </span>
                 <x-button class="assistant-content-teacher" mini="" v-link="t.tlink" plain="" v-for="t in item.teacher">
-                  {{t.name}} | {{t.evaluate_count}}
+                  {{t.name}}
                 </x-button>
               </p>
 
@@ -65,24 +65,8 @@
             </div>
             <div class="card-padding show-more none">
               <ul class="discuss_list">
-                <li class="discuss_item" v-for="comment in evaluateInfo[item.cid]">
-                  <div class="user_info">
-                    <strong class="nickname">{{comment.name}} <span class="star-num"> / {{comment.star}}</span>
-                      <div class="discuss_rater">
-                          <rater :font-size="13" :value="comment.star"  disabled=""></rater>
-                      </div>
-                      </strong>
-                  </div>
-                  <div class="discuss_message">
-                    <span class="discuss_status">{{comment.status}}</span>
-                    <div class="discuss_message_content">{{comment.content}}</div>
-                  </div>
-                  <p class="discuss_extra_info">{{comment.time}} by 匿名用户
-                    <a v-if="comment.is_from_me" class="discuss_del js_del" href="javascript:;" data-my-id="<#=my_id#>" data-content-id="<#=content_id#>">删除</a>
-                  </p>
-                </li>
+                <span >加载中……</span>
               </ul>
-              <p >你还没有进行过评教诶，赶快点击上方教师名，做出你的评价吧！</p>
             </div>
           </div>
         </card>
@@ -126,10 +110,33 @@ function scheduleItems(data){
   return course;
 }
 
+function evaluate2html(data) {
+  let str='';
+  console.log(data);
+  for(let i=0;i<data.length;i++){
+    let comment=data[i];
+    str+='<li class="discuss_item" >'+
+  '                  <div class="user_info">'+
+  '                    <strong class="nickname">'+comment.name+' <span class="star-num"> / '+comment.star+'</span>'+
+  '                      </strong>'+
+  '                  </div>'+
+  '                  <div class="discuss_message">'+
+  '                    <div class="discuss_message_content">'+comment.content+'</div>'+
+  '                  </div>'+
+  '                  <p class="discuss_extra_info">'+comment.time+' by 匿名用户'+
+  '                  </p>'+
+  '                </li>';
+  }
+  if(!str){
+    str='<p>你还没有进行过评教诶，赶快点击上方教师名，做出你的评价吧！</p>';
+  }
+  return str;
+
+}
+
 
 function evaluate(datas) {
   let lists = [];
-  console.log(datas);
   for (let i = 0; i < datas.length; i++) {
     let data = datas[i];
     let list = lists[i] = {};
@@ -160,26 +167,27 @@ export default {
   methods: {
     showMore:function(cid,t){
       let v=t.$event;
-      // console.log(t);
       $(v.path[0]).children("span").toggleClass("none");
-      $(v.path[1]).children(".show-more").toggleClass("none");
       let _this=this;
-      let data={};
-      data.cid=cid;
-      common.get("/jwc/evaluate",data,function (e,r) {
-        if(e!=null){
-          _this.$vux.toast.show({
-            text:e,
-            type:"warn"
-          });
-          return;
-        }
-        let ev=evaluate(r.data.data);
-        for (let i = 0; i < ev.length; i++) {
-          _this.evaluateInfo[cid].push(e[i]);
-        }
-        console.log(_this.evaluateInfo);
-      });
+      if($(v.path[1]).children(".show-more").hasClass("none")){
+        let data={};
+        data.cid=cid;
+        common.get("/jwc/evaluate",data,function (e,r) {
+          if(e!=null){
+            _this.$vux.toast.show({
+              text:e,
+              type:"warn"
+            });
+            return;
+          }
+          let str=evaluate2html(evaluate(r.data.data));
+          $(v.path[1]).find(".show-more .discuss_list").html(str);
+          $(v.path[1]).children(".show-more").toggleClass("none");
+        });
+      }else {
+        $(v.path[1]).children(".show-more").toggleClass("none");
+      }
+
     }
 
   },
@@ -204,9 +212,6 @@ export default {
         return;
       }
       _this.items=scheduleItems(r);
-      for (let i = 0; i < _this.items.length; i++) {
-        _this.evaluateInfo[_this.items[i].id]=[];
-      }
     });
 
   }
@@ -221,6 +226,12 @@ export default {
   }
   .none{
     display: none;
+  }
+  .discuss_item{
+    border-bottom: 1px solid #eee;
+  }
+  .discuss_list{
+    padding-bottom: 0;
   }
 }
 
