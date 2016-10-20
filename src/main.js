@@ -11,6 +11,7 @@ import Exam from './jwc/Exam'
 import Grade from './jwc/Grade'
 import Schedule from './jwc/Schedule'
 import Evaluation from './jwc/Evaluation'
+import Evaluate from './jwc/Evaluate'
 
 //用户相关
 import Login from './user/Login'
@@ -68,6 +69,9 @@ router.map({
 	},
 	'evaluation':{
 		component:Evaluation
+	},
+	'evaluate':{
+		component:Evaluate
 	}
 });
 

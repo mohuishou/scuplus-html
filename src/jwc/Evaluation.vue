@@ -129,6 +129,8 @@ function scheduleItems(data){
         eva[k].star = eva[k].stars;
       }
       c.teacher[j].evaluate_info=eva;
+
+      c.teacher[j].tlink="/evaluate?cid="+c.id+"&tid="+c.teacher[j].id;
     }
     course.push(c);
   }
