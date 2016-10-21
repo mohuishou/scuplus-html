@@ -18,7 +18,7 @@
         <x-input title="验证码" :value.sync="verify.code" :show-clear=false type="number" placeholder="请输入验证码">
           <x-button slot="right" v-show="verify.countShow" type="disabled">
             发送中
-            <countdown :time="120" @on-finish="verifyFinish(1)"></countdown>
+            <countdown :time="time" @on-finish="verifyFinish(1)"></countdown>
           </x-button>
           <x-button @click="sendVerify(1)" slot="right" v-show="!verify.countShow" type="primary">发送验证码</x-button>
         </x-input>
@@ -38,7 +38,7 @@
         <x-input title="验证码" :value.sync="bindVerify.code" :show-clear=false type="number" placeholder="请输入验证码">
           <x-button slot="right" v-show="bindVerify.countShow" type="disabled">
             发送中
-            <countdown :time="120" @on-finish="verifyFinish(2)"></countdown>
+            <countdown :time="time" @on-finish="verifyFinish(2)"></countdown>
           </x-button>
           <x-button @click="sendVerify(2)" slot="right" v-show="!bindVerify.countShow" type="primary">发送验证码</x-button>
         </x-input>
@@ -104,11 +104,13 @@ export default {
       },
       verifyType: "1",
       bindType: "",
-      user: {}
+      user: {},
+      time:120
     }
   },
   methods: {
     verifyFinish(type) {
+      this.time=120;
       if (type == 1) {
         this.verify.countShow = false;
       } else {

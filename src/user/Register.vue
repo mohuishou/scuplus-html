@@ -67,7 +67,7 @@ export default {
       countShow:false,
       password:'',
       verifyCode:'',
-      time
+      time:120
     }
   },
   methods :{
