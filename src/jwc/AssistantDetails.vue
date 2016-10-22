@@ -1,6 +1,6 @@
 <template>
 <div id="assistant-details">
-  <scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;" lock-x scrollbar-y use-pullup>
+  <scroller id="course-scroller" v-ref:scroller :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;" lock-x scrollbar-y use-pullup >
     <div id="course-box">
       <card>
         <div class="weui_panel_hd panel-title" slot="header">
@@ -263,9 +263,8 @@ export default {
         });
       } else {
         _this.$set("list", evaluate(r.data.data));
-        console.log(r.data);
+        _this.$refs.scroller.reset();
       }
-      console.log(r);
     });
   }
 }

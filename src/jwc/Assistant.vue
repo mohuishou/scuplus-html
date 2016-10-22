@@ -1,6 +1,6 @@
 <template>
 <div id="assistant">
-  <scroller id="course-scroller" :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;" lock-x scrollbar-y use-pullup>
+  <scroller id="course-scroller" v-ref:scroller  :pullup-config="pullupConfig" @pullup:loading="load" style="height:100%;" lock-x scrollbar-y use-pullup>
     <div id="course-box">
       <div v-for="item in items">
         <card :footer="{title:'查看更多',link:item.clink}">
@@ -194,13 +194,19 @@ export default {
         });
       } else {
         _this.$set("items", course(r.data.data));
+        console.log(_this.$refs);
+        _this.$refs.scroller.reset();
       }
     });
   }
 }
 </script>
 <style>
-#assistant {
+#assistant{
+  height: 100%;
+  overflow: hidden;
+}
+#assistant #course-scroller{
   height: 100%;
   overflow: hidden;
 }
