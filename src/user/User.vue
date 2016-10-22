@@ -13,7 +13,7 @@
           课程
         </div>
         <div class="vux-1px-r">
-          <span>0</span>
+          <span>{{exam}}</span>
           <br/>
           考试
         </div>
@@ -32,11 +32,11 @@
     <group title="教务">
       <cell title="成绩/绩点" :value="grade" link="/grade"></cell>
       <cell title="课程表" :value="schedule" link="/schedule"></cell>
-      <cell title="考试" value="Protected" link="/exam"></cell>
+      <cell title="考试" :value="exam" link="/exam"></cell>
     </group>
     <group title="图书">
-      <cell title="当前借阅" value="Protected" link="/component/radio"></cell>
-      <cell title="历史借阅" value="Protected" link="/component/radio"></cell>
+      <cell title="当前借阅"  value="Protected" ></cell>
+      <cell title="历史借阅"  value="Protected" ></cell>
     </group>
     <group title="个人设置">
       <cell title="手机绑定" :value="user.phone ? user.phone:'未绑定'" link="/bind"></cell>
@@ -83,7 +83,8 @@ export default {
       user:{},
       grade:"",
       schedule:"",
-      logoutShow:false
+      logoutShow:false,
+      exam:""
     }
   },
   methods :{
@@ -158,6 +159,18 @@ export default {
         return;
       }
       _this.user=r;
+    });
+
+    //考试信息获取
+    init.exam(function (e,r) {
+      if(e!=null){
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
+        return;
+      }
+      _this.exam=r.length;
     });
   }
 }

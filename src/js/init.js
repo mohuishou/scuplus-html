@@ -10,6 +10,7 @@ init.init=function (callback) {
   this.userInfo(callback,true);
   this.grade(callback,true);
   this.schedule(callback,true);
+  this.exam(callback,true);
 }
 
 /**
@@ -87,4 +88,33 @@ init.userInfo=function (callback,update=false){
     callback(null,JSON.parse(user));
   }
 }
+
+/**
+ * 考试信息获取
+ * @method exam
+ * @param  {Function} callback       [description]
+ * @param  {Boolean}  [update=false] [description]
+ * @return {[type]}                  [description]
+ */
+init.exam=function(callback,update=false) {
+  let exam=s.get("exam");
+  if(!exam||update){
+    common.get("/jwc/exam",null,function(e,r){
+      if(e!=null){
+        callback(e);
+        return;
+      }
+      if(r.status==1){
+        s.set("exam",r.data);
+        callback(null,r.data);
+      }else {
+        callback("教务处信息！");
+      }
+    });
+  }else {
+    callback(null,JSON.parse(exam));
+  }
+}
+
+
 module.exports=init;
