@@ -18,7 +18,7 @@
                     平均分
                 </span>
               <span style="background: #FF9933">
-                    {{item.avg_grade}}
+                    {{item.avg_grade}} 分
                 </span>
               </span>
               <span class="badge">
@@ -26,7 +26,7 @@
                     上课人次
                 </span>
               <span style="background: #99CC66;">
-                    {{item.count_grade}}
+                    {{item.count_grade}} 人
                 </span>
               </span>
               <span class="badge">
@@ -34,7 +34,7 @@
                     评教人次
                 </span>
               <span style="background: #FF9933;">
-                    {{item.count_star}}
+                    {{item.count_star}} 人
                 </span>
               </span>
               <span class="badge">

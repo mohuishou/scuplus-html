@@ -25,7 +25,7 @@
                     上课人次
                 </span>
               <span style="background: #99CC66;">
-                    {{item.count_grade}} 次
+                    {{item.count_grade}} 人
                 </span>
               </span>
               <span class="badge">
@@ -33,7 +33,7 @@
                     评教人次
                 </span>
                 <span style="background: #FF9933;">
-                    {{item.count_star}} 次
+                    {{item.count_star}} 人
                 </span>
               </span>
               <span class="badge">
