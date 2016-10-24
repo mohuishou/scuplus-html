@@ -17,6 +17,7 @@ import Evaluate from './jwc/Evaluate'
 import Login from './user/Login'
 import Register from './user/Register'
 import BindJwc from './user/BindJwc'
+import BindLibrary from './user/BindLibrary'
 import User from './user/User'
 import Forgot from './user/Forgot'
 import Bind from './user/Bind'
@@ -66,6 +67,9 @@ router.map({
 	},
 	'/bind':{
 		component:Bind
+	},
+	'/bind-library':{
+		component:BindLibrary
 	},
 	'evaluation':{
 		component:Evaluation

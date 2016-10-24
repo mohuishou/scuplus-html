@@ -51,8 +51,8 @@ export default {
       this.isDisabled = true;
 
       common.post("/jwc/bind", this.param, function(e, r) {
-        this.btnText = "提交";
-        this.isDisabled = false;
+        _this.btnText = "提交";
+        _this.isDisabled = false;
         if (e != null) {
           _this.$vux.toast.show({
             text: e,
