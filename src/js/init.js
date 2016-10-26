@@ -116,5 +116,12 @@ init.exam=function(callback,update=false) {
   }
 }
 
+init.libraryNow=function(callback,update=false){
+  
+}
+
+init.LibraryHistory=function(callback,update=false){
+  
+}
 
 module.exports=init;

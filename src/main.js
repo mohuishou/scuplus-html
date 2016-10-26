@@ -3,7 +3,7 @@ import Vue from 'vue'
 import App from './App'
 import Router from 'vue-router'
 
-
+//教务处相关
 import Assistant from './jwc/Assistant'
 import AssistantDetails from './jwc/AssistantDetails'
 import Search from './jwc/Search'
@@ -22,6 +22,9 @@ import User from './user/User'
 import Forgot from './user/Forgot'
 import Bind from './user/Bind'
 
+//图书馆相关
+import LibraryNow from './library/Now'
+import LibraryHistory from './library/History'
 
 import ToastPlugin from 'vux/src/plugins/toast'
 Vue.use(Router);
@@ -71,11 +74,14 @@ router.map({
 	'/bind-library':{
 		component:BindLibrary
 	},
-	'evaluation':{
+	'/evaluation':{
 		component:Evaluation
 	},
-	'evaluate':{
+	'/evaluate':{
 		component:Evaluate
+	},
+	'/library/now':{
+		component:LibraryNow
 	}
 });
 
