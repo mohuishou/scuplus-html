@@ -36,7 +36,7 @@
     </group>
     <group title="图书">
       <cell title="当前借阅" link="/library/now"  :value="library.now " ></cell>
-      <cell title="历史借阅" link="/library/history"  value="Protected" ></cell>
+      <cell title="历史借阅" link="/library/history"  :value="library.history" ></cell>
     </group>
     <group title="个人设置">
       <cell title="手机绑定" :value="user.phone ? user.phone:'未绑定'" link="/bind"></cell>
@@ -186,6 +186,17 @@ export default {
         return;
       }
       _this.library.now=r.length;
+    });
+
+    init.libraryHistory(function (e,r) {
+      if(e!=null){
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
+        return;
+      }
+      _this.library.history=r.length;
     });
   }
 }

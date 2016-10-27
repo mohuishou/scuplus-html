@@ -41,7 +41,6 @@ import Loading from 'vux/src/components/loading'
 import init from '../js/init'
 import common from '../js/common'
 import XButton from 'vux/src/components/x-button'
-import g from '../js/grade'
 import {
   update_title
 } from '../vuex/actions'
@@ -237,7 +236,7 @@ export default {
       background:#efefef;
     }
 
-    
+
     @media (max-width:500px) {
       table th{
         font-size:13px;

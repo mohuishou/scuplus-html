@@ -119,7 +119,7 @@ init.exam=function(callback,update=false) {
 }
 
 /**
- * 获取图书馆数据
+ * 获取图书馆当前借阅数据
  * @param  {Function}
  * @param  {Boolean}
  * @return {[type]}
@@ -142,11 +142,33 @@ init.libraryNow=function(callback,update=false){
   }else {
     callback(null,JSON.parse(data));
   }
-  
+
 }
 
-init.LibraryHistory=function(callback,update=false){
-  
+/**
+ * 获取图书馆历史借阅数据
+ * @param  {Function}     callback       [description]
+ * @param  {Boolean}      [update=false] [description]
+ */
+init.libraryHistory=function(callback,update=false){
+  let data=s.get("library_history");
+  if(!data||update){
+    common.get("/library/history",null,function (e,r) {
+        if(e!=null){
+          callback(e);
+          return;
+        }
+        if(r.status==1){
+          s.set("library_history",r.data);
+          callback(null,r.data);
+        }else {
+          callback(r.msg);
+        }
+    });
+  }else {
+    callback(null,JSON.parse(data));
+  }
+
 }
 
 module.exports=init;

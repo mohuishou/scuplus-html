@@ -82,6 +82,9 @@ router.map({
 	},
 	'/library/now':{
 		component:LibraryNow
+	},
+	'/library/history':{
+		component:LibraryHistory
 	}
 });
 
