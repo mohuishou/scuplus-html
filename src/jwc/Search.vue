@@ -216,7 +216,7 @@
 <!-- 切换按钮 -->
 <div v-show="isResult" id="search-switch">
   <div class="icon" @click="searchSwitch">
-    <img src="../assets/img/switch.png">
+    <i class="iconfont icon-refresh"></i>
   </div>
 </div>
 <!-- 切换按钮end -->
@@ -496,13 +496,14 @@ export default {
   border-radius: 25px;
   background: rgba(53, 73, 94, 0.7);
   text-align: center;
+  color: #fff;
+  font-size: 25px;
+  line-height:175%;
+}
+.icon i{
+  font-size:22px;
 }
 
-.icon img {
-  margin-top: 12.5px;
-  text-align: center;
-  width: 25px;
-}
 
 #search-result {
   height: 100%;

@@ -11,6 +11,8 @@ init.init=function (callback) {
   this.grade(callback,true);
   this.schedule(callback,true);
   this.exam(callback,true);
+  this.libraryNow(callback,true);
+  this.LibraryHistory(callback,true);
 }
 
 /**
@@ -108,7 +110,7 @@ init.exam=function(callback,update=false) {
         s.set("exam",r.data);
         callback(null,r.data);
       }else {
-        callback("教务处信息！");
+        callback("教务处错误！");
       }
     });
   }else {
@@ -116,7 +118,30 @@ init.exam=function(callback,update=false) {
   }
 }
 
+/**
+ * 获取图书馆数据
+ * @param  {Function}
+ * @param  {Boolean}
+ * @return {[type]}
+ */
 init.libraryNow=function(callback,update=false){
+  let data=s.get("library_now");
+  if(!data||update){
+    common.get("/library/now",null,function (e,r) {
+        if(e!=null){
+          callback(e);
+          return;
+        }
+        if(r.status==1){
+          s.set("library_now",r.data);
+          callback(null,r.data);
+        }else {
+          callback(r.msg);
+        }
+    });
+  }else {
+    callback(null,JSON.parse(data));
+  }
   
 }
 

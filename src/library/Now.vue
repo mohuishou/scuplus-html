@@ -1,26 +1,23 @@
 <template>
-<div id="grade">
+<div id="library">
     <table class="table table-resposive table-bordered">
       <caption> <b>当前图书借阅信息</b>
       </caption>
-      <thead @click="chooseTable">
+      <thead>
         <tr class="title">
           <th>书名</th>
           <th>作者</th>
           <th>到期时间</th>
-          <th>续借</th>
+          <th><x-button @click="loanAll()"  mini text="续借全部" plain></x-button></th>
         </tr>
         <tbody>
-          <tr v-for="g in grade.grades" type="{{ g.courseType=='必修' ? 1 : 0}}" @click="choose">
-            <td>{{g.name}}</td>
-
-            <td class="grade" grade="{{ g.gradeCal }}">{{g.grade}}</td>
-
-            <td class="gpa">{{ g.gpa }}</td>
-
-            <td class="credit">{{ g.credit }}</td>
-
-            <td class="courseType"><x-button text="续借" :disabled="isDisabled" @click="bind" plain></x-button></td>
+          <tr v-for="now in libraryNow">
+            <td>{{now.title}}</td>
+            <td>{{now.author}}</td>
+            <td>{{ now.end_day }}</td>
+            <td>
+              <x-button @click="loanOne(now.review_id)" :type="now.status>0 ? 'primary' : 'warn'" mini :text="now.status<0 ? ('欠费：'+now.money):'续借'" :disabled="now.status<0 ? true : false" plain></x-button>
+            </td>
           </tr>
 
         </tbody>
@@ -30,16 +27,16 @@
 
   <loading :show="loadingShow" :text="loading"></loading>
 </div>
-
+<!-- 更新按钮 -->
+<div @click="update(true)" id="search-switch">
+  <div class="icon" @click="update">
+    <i class="iconfont icon-refresh"></i>
+  </div>
+</div>
+<!-- 更新按钮end -->
 </template>
 
 <script>
-import {
-  Tabbar,
-  TabbarItem
-} from 'vux/src/components/tabbar'
-import Dialog from 'vux/src/components/dialog'
-import Alert from 'vux/src/components/alert'
 import Loading from 'vux/src/components/loading'
 import init from '../js/init'
 import common from '../js/common'
@@ -49,12 +46,36 @@ import {
   update_title
 } from '../vuex/actions'
 
+/**
+ * 计算图书状态：1:正常，0：5天内超期，-1：已超期
+ * @param  {[type]} datas [description]
+ * @return {[type]}       [description]
+ */
+function checkLibrary(datas) {
+  for (let i=0;i < datas.length ;  i++) {
+    //计算剩余时间
+    let data=datas[i];
+    data.end_day=data.end_day.trim();
+    let end_day=data.end_day.substring(0,4)+"-"+data.end_day.substring(4,6)+"-"+data.end_day.substring(6);
+    end_day=Date.parse(new Date(end_day));
+    let now_day=Date.parse(new Date());
+    //剩余时间（天）
+    let duration=((end_day-now_day)/(1000*60*60*24)).toFixed(0);
+    if (duration<0) {
+      data.status=-1;
+    }else if (duration<5) {
+      data.status=0;
+    }else {
+      data.status=1;
+    }
+    datas[i]=data;
+  }
+  return datas;
+}
+
 export default {
   components: {
-    Tabbar,
-    TabbarItem,
-    Alert,
-    Loading
+    Loading,XButton
   },
   vuex: {
     actions: {
@@ -63,98 +84,60 @@ export default {
   },
   data() {
     return {
-      grades: {},
-      resultShow: false,
-      helpShow: true,
-      sum: {
-        gpa: 0,
-        grade: 0,
-        credit: 0,
-        classNum: 0
-      },
-      avg: {
-        gpa: 0,
-        grade: 0
-      },
+      libraryNow: {},
       loading: "获取中，请稍候",
       loadingShow: false,
-      toggleRequired:true
     }
   },
   methods: {
-    //点击选择
-    choose: function(t) {
-      let tr = t.path[1];
-      $(tr).toggleClass('choose');
-    },
-
-    //选择一学期
-    chooseTable: function(t) {
-      let table = t.path[3];
-      let i = 0;
-      $(table).find('tbody tr').each(function(index, el) {
-        if ($(el).hasClass('choose')) {
-          $(el).removeClass('choose');
-          i++;
+    //更新当前
+    update:function (show=false) {
+      let _this = this;
+      if(show) this.loadingShow=true;
+      common.post("/library/now",null,function (e,r) {
+        if (show) {
+          if (e!=null) {
+            _this.$vux.toast.show({
+              type: "warn",
+              text: e
+            });
+            return;
+          }
+          if(r.status==1){
+            _this.$vux.toast.show({
+              type: "success",
+              text: r.msg
+            });
+          }
         }
+        common.storage.set("library_now",r.data);
+        _this.init();
+        _this.loadingShow=false;
       });
-      if (i == 0) {
-        $(table).find('tbody tr').each(function(index, el) {
-          $(el).addClass('choose');
-        });
-      }
     },
-
-    //选择所有必修
-    chooseRequired: function() {
-      if(this.toggleRequired){
-        $("tr").removeClass("choose");
-        $("tr[type='1']").addClass('choose');
-      }else {
-        $(".choose").removeClass("choose");
-      }
-      this.toggleRequired=!this.toggleRequired;
-
+    //初始化
+    init:function () {
+      let _this = this;
+      init.libraryNow(function (e,r){
+        if (e!=null) {
+          _this.$vux.toast.show({
+            type: "warn",
+            text: e
+          });
+          return;
+        }
+        _this.libraryNow=checkLibrary(r);
+      });
     },
-
-    //计算已选择的成绩
-    calculation: function() {
-      let sum = {
-        gpa: 0,
-        grade: 0,
-        credit: 0,
-        classNum: 0
+    //续借单本
+    loanOne: function(id) {
+      let data={
+        review_id:id
       };
-      let avg = {
-        gpa: 0,
-        grade: 0
-      }
-      $("tr[class='choose']").each(function(i, e) {
-        let credit = parseFloat($(e).children('.credit').text());
-        sum.credit += parseFloat($(e).children('.credit').text());
-        sum.gpa += parseFloat($(e).children('.gpa').text()) * credit;
-        sum.grade += parseFloat($(e).children('.grade').attr("grade")) * credit;
-        sum.classNum++;
-      });
-      avg.gpa = (sum.gpa / sum.credit).toFixed(2);
-      avg.grade = (sum.grade / sum.credit).toFixed(2);
-      this.sum = sum;
-      this.avg = avg;
-      this.resultShow = true;
-    },
-
-    //帮助
-    help: function() {
-      this.helpShow = true;
-    },
-
-    //更新成绩
-    update: function() {
       let _this = this;
       this.loadingShow=true;
-      common.post("/jwc/grade",null,function (e,r) {
+      common.post("/library/loan/one",data,function (e,r) {
         _this.loadingShow=false;
-
         if (e!=null) {
           _this.$vux.toast.show({
             type: "warn",
@@ -167,34 +150,48 @@ export default {
             type: "success",
             text: r.msg
           });
-          let grade=g.cal(r.data);
-          _this.grades=grade;
-          common.storage.set("grade",grade);
+          _this.update();
         }
       });
 
-
+    },
+     //续借全部
+    loanAll: function() {
+      let _this = this;
+      this.loadingShow=true;
+      common.post("/library/loan/all",null,function (e,r) {
+        _this.loadingShow=false;
+        if (e!=null) {
+          _this.$vux.toast.show({
+            type: "warn",
+            text: e
+          });
+          return;
+        }
+        if(r.status==1){
+          _this.$vux.toast.show({
+            type: "success",
+            text: r.msg
+          });
+          _this.update();
+        }
+      });
     }
   },
   ready() {
-
     this.update_title("当前借阅");
-
-    let _this = this;
-
-
+    this.init();
   }
 }
 </script>
 <style lang="less">
-#grade {
+#library {
     background: #fefefe;
     padding: 10px;
 }
 
-#grade {
+#library {
     table {
-        border: 1px solid #ccc;
         width: 95%;
         margin: 20px auto !important;
         padding: 0;
@@ -204,9 +201,14 @@ export default {
         font-size: 14px;
         color: #333244;
     }
+    table,tr,td,th{
+       border: 1px solid #ddd;
+    }
+    table td{
+      min-width:40px;
+    }
     table caption,
     table tr {
-        border: 1px solid #ddd;
         padding: 5px;
     }
     table td,
@@ -221,7 +223,6 @@ export default {
     }
     tbody tr:nth-child(even) {
         background: #fbf9fe;
-        /*color: #ececec;*/
     }
     table caption {
         background: #495c70;
@@ -232,25 +233,24 @@ export default {
     table .title {
         border: 1px solid #ddd;
     }
-    table thead th,
-    table thead tr {
-        border: none;
+    tr:hover{
+      background:#efefef;
     }
-    .choose {
-        background: #ececec !important;
-    }
-    .help,
-    .result {
-        color: #333244;
-    }
-    .help {
-        text-align: left;
-    }
-    .help div {
-        background: #eee;
-        border: 1px solid #ccc;
-        margin-top: 5px;
-        padding: 10px;
+
+    
+    @media (max-width:500px) {
+      table th{
+        font-size:13px;
+      }
+      table td{
+        font-size:12px;
+      }
+      .weui_btn.weui_btn_mini {
+          line-height: 1.5;
+          font-size:12px;
+          padding: 0 .5em;
+          display: inline-block;
+      }
     }
 }
 </style>

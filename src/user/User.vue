@@ -23,7 +23,7 @@
           成绩/绩点
         </div>
         <div>
-          <span>5</span>
+          <span>{{library.now}}</span>
           <br/>
           图书
         </div>
@@ -35,8 +35,8 @@
       <cell title="考试" :value="exam" link="/exam"></cell>
     </group>
     <group title="图书">
-      <cell title="当前借阅"  value="Protected" ></cell>
-      <cell title="历史借阅"  value="Protected" ></cell>
+      <cell title="当前借阅" link="/library/now"  :value="library.now " ></cell>
+      <cell title="历史借阅" link="/library/history"  value="Protected" ></cell>
     </group>
     <group title="个人设置">
       <cell title="手机绑定" :value="user.phone ? user.phone:'未绑定'" link="/bind"></cell>
@@ -84,7 +84,11 @@ export default {
       grade:"",
       schedule:"",
       logoutShow:false,
-      exam:""
+      exam:"",
+      library:{
+        now:"",
+        history:""
+      }
     }
   },
   methods :{
@@ -171,6 +175,17 @@ export default {
         return;
       }
       _this.exam=r.length;
+    });
+
+    init.libraryNow(function (e,r) {
+      if(e!=null){
+        _this.$vux.toast.show({
+          text:e,
+          type:"warn"
+        });
+        return;
+      }
+      _this.library.now=r.length;
     });
   }
 }
