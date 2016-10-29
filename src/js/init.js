@@ -12,7 +12,7 @@ init.init=function (callback) {
   this.schedule(callback,true);
   this.exam(callback,true);
   this.libraryNow(callback,true);
-  this.LibraryHistory(callback,true);
+  this.libraryHistory(callback,true);
 }
 
 /**

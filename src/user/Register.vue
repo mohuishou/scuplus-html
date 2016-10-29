@@ -42,6 +42,7 @@ import Countdown from 'vux/src/components/countdown'
 import { Tab,TabItem } from 'vux/src/components/tab'
 import {update_title} from '../vuex/actions'
 import common from "../js/common"
+import md5 from "md5"
 let param={};
 
 export default {
@@ -76,7 +77,7 @@ export default {
       let _this=this;
 
       param.verifyCode=this.verifyCode;
-      param.password=this.password;
+      param.password=md5(this.password);
       let a=["username","password","verifyCode"];
 
       for(let i =0;i<a.length;i++){
@@ -87,25 +88,32 @@ export default {
         }
       }
 
-      let url="http://api.scuplus.cn/register/"+this.registerType;
-
-      $.post(url,param,function(r,e){
-
-        if(e){
-          _this.toast="注册失败";
-          _this.toastShow=true;
+      this.btnText="注册中请稍后......";
+      this.isDisabled=true;
+      common.post("/register/"+this.registerType,param,function (e,r) {
+        _this.btnText="注册";
+        _this.isDisabled=false;
+        if(e!=null){
+          _this.$vux.toast.show({
+            type:"warn",
+            text:e
+          });
           return;
         }
-
         if(r.status==1){
-          _this.toast="注册成功";
-          _this.toastShow=true;
+          _this.$vux.toast.show({
+            type:"success",
+            text:"注册成功"
+          });
+          storage.set("token", r.data.token);
+          //设置token产生时间
+          storage.set("token_start", new Date().getTime());
           setTimeout(function() {
             location.href="/#!/bind-jwc";
           },1500);
         }
-
       });
+
     },
     //验证码发送倒计时
     verifyFinish:function(){
@@ -116,36 +124,51 @@ export default {
     sendVerify:function(){
       //检测邮箱或者手机号状态
       if(!param.phone&&!param.email){
-        this.toast="请输入正确的手机号或邮箱地址"
-        this.toastShow=true;
+        this.$vux.toast.show({
+          type:"warn",
+          text:"请输入正确的手机号或邮箱地址"
+        });
         return;
       }
       let _this=this;
-      let url="http://api.scuplus.cn/verify/send/"+this.registerType;
 
-      $.post(url,param,function(r){
-        console.log(r);
-        if(r.status!=1){
-              _this.toast=r.data.msg
-              _this.toastShow=true;
-          }
+      common.post("/verify/send/"+this.registerType,param,function (e,r) {
+        if(e!=null){
+          _this.$vux.toast.show({
+            type:"warn",
+            text:e
+          });
+          return;
+        }
+        if(r.status==1){
+          //开启倒计时
+          _this.countShow=!_this.countShow;
+        }
+
       });
-      //开启倒计时
-      this.countShow=!this.countShow;
     },
 
     //检测用户名
     changeUsername : function (v) {
         let _this=this;
         let username=v.path[0].value;
-        $.post('http://api.scuplus.cn/user/check', {
+        common.post('/user/check',{
             'param':'username' ,
             'value':username
-        }, function(r){
+        },function (e,r) {
+          if(e!=null){
+            _this.$vux.toast.show({
+              type:"warn",
+              text:e
+            });
+            return;
+          }
           if(r.status==1){
             if(r.data.user==1){
-                _this.toast="用户名已存在"
-                _this.toastShow=true;
+              _this.$vux.toast.show({
+                type:"warn",
+                text:"用户名已存在"
+              });
             }else{
                 param.username=username;
             }
@@ -163,19 +186,29 @@ export default {
         let _this=this;
         let phone=v.path[0].value;
 
-        $.post('http://api.scuplus.cn/user/check', {
+        common.post('/user/check',{
             'param':'phone' ,
             'value':phone
-        }, function(r){
+        },function (e,r) {
+          if(e!=null){
+            _this.$vux.toast.show({
+              type:"warn",
+              text:e
+            });
+            return;
+          }
           if(r.status==1){
             if(r.data.user==1){
-                _this.toast="手机号已被注册"
-                _this.toastShow=true;
+              _this.$vux.toast.show({
+                type:"warn",
+                text:"手机号已存在"
+              });
             }else{
                 param.phone=phone;
             }
           }
         });
+
     },
 
     //检测邮箱地址是否符合
@@ -188,14 +221,23 @@ export default {
         let _this=this;
         let email=v.path[0].value;
 
-        $.post('http://api.scuplus.cn/user/check', {
-            'param':'email' ,
-            'value':email
-        }, function(r){
+        common.post('/user/check',{
+          'param':'email' ,
+          'value':email
+        },function (e,r) {
+          if(e!=null){
+            _this.$vux.toast.show({
+              type:"warn",
+              text:e
+            });
+            return;
+          }
           if(r.status==1){
             if(r.data.user==1){
-                _this.toast="邮箱已被注册"
-                _this.toastShow=true;
+              _this.$vux.toast.show({
+                type:"warn",
+                text:"邮箱已被注册"
+              });
             }else{
                 param.email=email;
             }
